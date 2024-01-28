@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
+import * as ImageManipulator from 'expo-image-manipulator';
+import * as FileSystem from 'expo-file-system';
 
 const Test = () => {
   const [capturedImage, setCapturedImage] = useState(null);
   const [cameraPermission, setCameraPermission] = useState(null);
   const cameraRef = useRef(null);
+  const [predictions, setPredictions] = useState([]);
+
 
   // Request camera permissions
   useEffect(() => {
@@ -18,6 +22,9 @@ const Test = () => {
   // Function to open the device's camera using Expo Camera
   const openCamera = async () => {
     if (cameraPermission && cameraRef.current) {
+      // Reset predictions when opening the camera
+      setPredictions([]);
+
       try {
         const photo = await cameraRef.current.takePictureAsync();
         setCapturedImage(photo.uri);
@@ -27,61 +34,99 @@ const Test = () => {
     }
   };
 
-  // Function to convert the captured image to base64
-  const convertImageToBase64 = async (imageUri) => {
-    const response = await fetch(imageUri);
-    const blob = await response.blob();
+  // Function to resize the image using expo-image-manipulator
+  const resizeImage = async (imageUri) => {
+    try {
+      const resizedImage = await ImageManipulator.manipulateAsync(
+        imageUri,
+        [{ resize: { width: 600, height: 600 } }],
+        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
+      );
 
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
+      return resizedImage.uri;
+    } catch (error) {
+      console.error('Error resizing image:', error);
+      throw error;
+    }
+  };
+
+  // Function to convert an image to base64
+  const convertImageToBase64 = async (imageUri) => {
+    try {
+      const base64 = await FileSystem.readAsStringAsync(imageUri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      return base64;
+    } catch (error) {
+      console.error('Error converting image to base64:', error);
+      throw error;
+    }
   };
 
   // Function to make the API request
   const makeApiRequest = async () => {
     if (capturedImage) {
       console.log('Captured Image URI:', capturedImage);
-
-      const imageBase64 = await convertImageToBase64(capturedImage);
-
-      // Define your endpoint and project IDs
-      const ENDPOINT_ID="8171194384654532608"
-      const PROJECT_ID="834745453959"
-
-      // Create the JSON object
-      const data = {
-        instances: [
-          {
-            content: imageBase64,
+  
+      // Resize the image
+      const resizedImage = await resizeImage(capturedImage);
+      console.log('Resized Image URI:', resizedImage);
+  
+      // Convert the resized image to base64
+      try {
+        const imageBase64 = await convertImageToBase64(resizedImage);
+        console.log('Base64 Image:', imageBase64);
+  
+        // Continue with your API request using the imageBase64
+        // ...
+  
+        // Define your endpoint and project IDs
+        const ENDPOINT_ID = '8171194384654532608';
+        const PROJECT_ID = '834745453959';
+  
+        // Create the JSON object
+        const data = {
+          instances: [
+            {
+              content: imageBase64,
+            },
+          ],
+          parameters: {
+            confidenceThreshold: 0.5,
+            maxPredictions: 1,
           },
-        ],
-        parameters: {
-          confidenceThreshold: 0.5,
-          maxPredictions: 1,
-        },
-      };
-
-      // Make the API request
-      fetch(`https://us-central1-aiplatform.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/endpoints/${ENDPOINT_ID}:predict`, {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ya29.a0AfB_byA7WpC-b881VmSJ2oqwG9tFTmyaQ6bbIvvGMQ6tlONn8A4Sv72Xs2l3hBOhBCGtktu_FQieB_OpuXO60b_D6GI-fuayDI4zS_7R9zYnaj25Kr1vPbVEoep4dAuQee31J0vxT2GoY8QgwBLDz6xzeV-s5UXo0h5CMgOnDgaCgYKAWMSARISFQHGX2Mi0IT0gy5mARLmu7Ky3jPPDQ0177',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-        .then(response => response.json())
-        .then(result => {
-          // Handle the API response here
-          console.log(result);
+        };
+  
+        // Make the API request
+        fetch(`https://us-central1-aiplatform.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/endpoints/${ENDPOINT_ID}:predict`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ya29.a0AfB_byA7WpC-b881VmSJ2oqwG9tFTmyaQ6bbIvvGMQ6tlONn8A4Sv72Xs2l3hBOhBCGtktu_FQieB_OpuXO60b_D6GI-fuayDI4zS_7R9zYnaj25Kr1vPbVEoep4dAuQee31J0vxT2GoY8QgwBLDz6xzeV-s5UXo0h5CMgOnDgaCgYKAWMSARISFQHGX2Mi0IT0gy5mARLmu7Ky3jPPDQ0177', // Replace with your actual access token
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
         })
-        .catch(error => {
-          // Handle errors here
-          console.error(error);
-        });
+          .then(response => response.json())
+          .then(result => {
+            // Handle the API response here
+            console.log(result);
+  
+            // Extract predictions from the result
+            const predictions = result.predictions || [];
+  
+            // Log predictions to console
+            console.log('Predictions:', predictions);
+  
+            // Display predictions in a View
+            setPredictions(predictions);
+          })
+          .catch(error => {
+            // Handle errors here
+            console.error(error);
+          });
+      } catch (error) {
+        console.error('Error converting image to base64:', error);
+      }
     }
   };
 
@@ -94,8 +139,18 @@ const Test = () => {
         onCameraReady={() => console.log('Camera is ready')}
       />
       
-      <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20 }}>
+      <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20, backgroundColor: "white" }}>
         <Text>Your React Native App</Text>
+        <View style={{backgroundColor: "white"}}>
+          <Text>Predictions:</Text>
+          {predictions.map((prediction, index) => (
+            <View key={index}>
+              <Text>Confidences: {prediction.confidences.join(', ')}</Text>
+              <Text>Display Names: {prediction.displayNames.join(', ')}</Text>
+              <Text>IDs: {prediction.ids.join(', ')}</Text>
+            </View>
+          ))}
+        </View>
 
         {/* Display the captured image if available */}
         {capturedImage && (
@@ -107,7 +162,7 @@ const Test = () => {
 
         {/* Button to open the camera */}
         <TouchableOpacity onPress={openCamera} style={{ padding: 10, backgroundColor: 'blue', borderRadius: 5, marginBottom: 10 }}>
-          <Text style={{ color: 'white' }}>Open Camera</Text>
+          <Text style={{ color: 'white' }}>Take Photo</Text>
         </TouchableOpacity>
 
         {/* Button to make the API request */}
