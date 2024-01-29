@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "desksense-project",
+  "private_key_id": "aee1e63db9c3fa2d67b526cb12f44ae078777790",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDJdEsRP78lrC4/\n4QXWoZl1Akzr862gI7Tt6o03rUX9rZjEiSU+067AtF7R+Z8xthpkttTxP2IbzUy4\nQOFBcKv7yZf2M7aJmogqt3zPLQA0FwIseUKTnyRHh5GDgHKX/TS3kosZOfUJopjb\nShOrIvjQvhm1yjJQGZa8pdDJjkcWX6JIYSwFshk3Iqw8VrNxKGfHY67aAzq0jNxE\nwJn0xLjexvUNJpC4wIJl0zAMKRBObVOS+FRvsducB2NaEZ2GhhLUWNHyDhEK6ZzP\nl4h6Hk0BsJ+da7h1HrWkXtEPSpJQZ6R9VU7uO0AXAVnwR78hXLxPmDmYg7HxoPyL\nN31oei8fAgMBAAECggEAAjJLNfQTc5+phWEChBgXgNeyVcCDmU380nlbHtaUnOuZ\nM9+TflHbbfrIpw8z1IPCHtwzGpq7Ux+VkPRdrX/WuQZkFuHlR8XNFbtGZWpJVTEW\nQryeV3RyJDcaTQTWss/ehHE0z1RvjnqOHwyhHM7jIGe5YrsKtSlbFTd/0L7fcj1b\nDP1lvBba0XXA9S6wNF+6CoRAxU/swfd25Z2LE2Qj5SSRLOnDCk6jveoUP/sPzPT0\nEUf2IFTxTMR23ut8pziFRgPDaGhZFgSgl41elojHIlwn2Zzr2MAE3NmGyTc6+ovW\npCjVXjXrYbfbQdaR1jAn6ew0UFPg01Q5WLVLjZV8xQKBgQDkSeUAvqFuf/U1/JOE\nRmVtsdlapN1Cb+3pTHLhuJ/hlS4i1pbUHgkju9Pi57d6143r7Kv4QSv7qRqSQQmo\n5rAzt0la6kjRqRtyDbMuA0n8crAHke1vTfsiq6/VtxGEbxo+YyAtiOaUOcZBxKk5\nIKGwe2VkO2qfXxcKtJPX9kjcJQKBgQDh6IQhmGtYmdx3zS34SeCbDmchLodE8aFO\n7ueJNL/nmPK/NYg3TxgjrXu7IurWy6LDBSQvSL0wZFBPcSyiI68qwBKIjBJ74qB7\nEHLrvmI/VK4brjuikPs/P5KhT1V1JBVkOqYgT1BTRb7hkOacODDwb0bOnTDpTCiO\np6yF66rY8wKBgQDa8HedODZQaI2+ggbkNDNwecHv6e99mSU9uyDulAdZ7J27sbwj\noM65I5k5o2tXd8VXv7rKM47AI9Uk8RUXlG7mmmDSvaCq2xlEUBlJBsR9RWzHRc/G\nEK7K+IeBWrqFHZy4uo6QvRwOij42sypsbHxFaoK6FzXRtPu/O6IS29PStQKBgQCh\noaT4DH+xctRk+u6LGQCUsCdlfE7YKzHIsfIDHzS21Z3I5NpDCFozHKrMZ90yNZyM\ngB81nYuPFhbH4CeZEoL/yVD5VY7cCHfd1RUESsEsor+3ml+cnrLEvA2DUKnKGDkd\n70BxGY5VJi++X9g/qYyKWnOE3L7kDNNvzdQINWeVtQKBgQCSq30mzC+6fu48udal\nXG+jsUoiL0qij4lVHhDud2H6i/kgjuuaisO4NDTPzQVefcqRc0kscFXwHjjXGLYn\nVTcFfRn8nYNbpUxcfTLLRJ/KavSa9NtIyl3J11V8hhpihKyj8ybQDi/VYQsmfyqQ\nREknM+N8yNwd7ojumdvKWrCWiw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "desksense-project@appspot.gserviceaccount.com",
+  "client_id": "100403135911771790493",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/desksense-project%40appspot.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

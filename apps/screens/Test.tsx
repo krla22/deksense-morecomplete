@@ -1,15 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Alert, TextInput, ScrollView } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as FileSystem from 'expo-file-system';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { FIREBASE_AUTH, FIRESTORE_DB, REALTIME_DB } from '../../firebaseConfig';
+import { getDatabase, ref, onValue } from 'firebase/database';
+import { doc, getDoc } from 'firebase/firestore';
 
 const Test = () => {
   const [capturedImage, setCapturedImage] = useState(null);
   const [cameraPermission, setCameraPermission] = useState(null);
+  const [cameraType, setCameraType] = useState(Camera.Constants.Type.back); // Default to back camera
   const cameraRef = useRef(null);
   const [predictions, setPredictions] = useState([]);
-
+  const [autoCaptureInterval, setAutoCaptureInterval] = useState(null);
+  const [accessToken, setAccessToken] = useState('');
 
   // Request camera permissions
   useEffect(() => {
@@ -17,134 +23,143 @@ const Test = () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setCameraPermission(status === 'granted');
     })();
+
+    const fetchAccessToken = async () => {
+      const accessTokenDocRef = doc(FIRESTORE_DB, 'accessTokens', 'accessTokens'); // Replace with your actual document ID
+      try {
+        const docSnap = await getDoc(accessTokenDocRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setAccessToken(data.accessTokens);
+        } else {
+          console.log('No such document!');
+        }
+      } catch (e) {
+        console.error('Error fetching document:', e);
+      }
+    };
+
+    fetchAccessToken();
+
   }, []);
 
-  // Function to open the device's camera using Expo Camera
   const openCamera = async () => {
     if (cameraPermission && cameraRef.current) {
-      // Reset predictions when opening the camera
       setPredictions([]);
-
       try {
         const photo = await cameraRef.current.takePictureAsync();
-        setCapturedImage(photo.uri);
+        console.log('Base Image URI:', photo.uri);
+
+        const resizedImage = await ImageManipulator.manipulateAsync(
+          photo.uri,
+          [{ resize: { width: 600, height: 600 } }],
+          { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
+        );
+        console.log('Resized Image URI:', resizedImage.uri);
+
+        const imageBase64 = await FileSystem.readAsStringAsync(resizedImage.uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        console.log('Base64 Image Converted');
+
+        setCapturedImage(resizedImage.uri); // Update the state with the processed image URI
+
+        // Call makeApiRequest with the processed image
+        await makeApiRequest(resizedImage.uri, imageBase64);
       } catch (error) {
-        console.error('Error taking picture:', error);
+        console.error('Error taking and processing picture:', error);
       }
     }
   };
 
-  // Function to resize the image using expo-image-manipulator
-  const resizeImage = async (imageUri) => {
-    try {
-      const resizedImage = await ImageManipulator.manipulateAsync(
-        imageUri,
-        [{ resize: { width: 600, height: 600 } }],
-        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
-      );
+  const makeApiRequest = async (processedImageUri, imageBase64) => {
+    if (processedImageUri) {
+      console.log('Processed Image URI:', processedImageUri);
 
-      return resizedImage.uri;
-    } catch (error) {
-      console.error('Error resizing image:', error);
-      throw error;
-    }
-  };
+      const ENDPOINT_ID = '8171194384654532608';
+      const PROJECT_ID = '834745453959';
 
-  // Function to convert an image to base64
-  const convertImageToBase64 = async (imageUri) => {
-    try {
-      const base64 = await FileSystem.readAsStringAsync(imageUri, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-      return base64;
-    } catch (error) {
-      console.error('Error converting image to base64:', error);
-      throw error;
-    }
-  };
-
-  // Function to make the API request
-  const makeApiRequest = async () => {
-    if (capturedImage) {
-      console.log('Captured Image URI:', capturedImage);
-  
-      // Resize the image
-      const resizedImage = await resizeImage(capturedImage);
-      console.log('Resized Image URI:', resizedImage);
-  
-      // Convert the resized image to base64
-      try {
-        const imageBase64 = await convertImageToBase64(resizedImage);
-        console.log('Base64 Image:', imageBase64);
-  
-        // Continue with your API request using the imageBase64
-        // ...
-  
-        // Define your endpoint and project IDs
-        const ENDPOINT_ID = '8171194384654532608';
-        const PROJECT_ID = '834745453959';
-  
-        // Create the JSON object
-        const data = {
-          instances: [
-            {
-              content: imageBase64,
-            },
-          ],
-          parameters: {
-            confidenceThreshold: 0.5,
-            maxPredictions: 1,
+      const data = {
+        instances: [
+          {
+            content: imageBase64,
           },
-        };
-  
+        ],
+        parameters: {
+          confidenceThreshold: 0.5,
+          maxPredictions: 1,
+        },
+      };
+
+      try {
         // Make the API request
-        fetch(`https://us-central1-aiplatform.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/endpoints/${ENDPOINT_ID}:predict`, {
+        const response = await fetch(`https://us-central1-aiplatform.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/endpoints/${ENDPOINT_ID}:predict`, {
           method: 'POST',
           headers: {
-            'Authorization': 'Bearer ya29.a0AfB_byA7WpC-b881VmSJ2oqwG9tFTmyaQ6bbIvvGMQ6tlONn8A4Sv72Xs2l3hBOhBCGtktu_FQieB_OpuXO60b_D6GI-fuayDI4zS_7R9zYnaj25Kr1vPbVEoep4dAuQee31J0vxT2GoY8QgwBLDz6xzeV-s5UXo0h5CMgOnDgaCgYKAWMSARISFQHGX2Mi0IT0gy5mARLmu7Ky3jPPDQ0177', // Replace with your actual access token
-            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
           },
           body: JSON.stringify(data),
-        })
-          .then(response => response.json())
-          .then(result => {
-            // Handle the API response here
-            console.log(result);
-  
-            // Extract predictions from the result
-            const predictions = result.predictions || [];
-  
-            // Log predictions to console
-            console.log('Predictions:', predictions);
-  
-            // Display predictions in a View
-            setPredictions(predictions);
-          })
-          .catch(error => {
-            // Handle errors here
-            console.error(error);
-          });
+        });
+
+        const result = await response.json();
+        console.log(result);
+
+        const predictions = result.predictions || [];
+
+        console.log('Predictions:', predictions);
+
+        setPredictions(predictions);
       } catch (error) {
-        console.error('Error converting image to base64:', error);
+        console.error(error);
+        Alert.alert('API Request Error', error.message);
       }
     }
+  };
+
+  // Toggle between front and back cameras
+  const toggleCameraType = () => {
+    setCameraType(
+      cameraType === Camera.Constants.Type.back
+        ? Camera.Constants.Type.front
+        : Camera.Constants.Type.back
+    );
+  };
+
+  // Start automatic capture at intervals
+  const startAutoCapture = () => {
+    setAutoCaptureInterval(setInterval(() => {
+      openCamera();
+    }, 5000)); // Capture every 5 seconds
+  };
+
+  // Stop automatic capture
+  const stopAutoCapture = () => {
+    clearInterval(autoCaptureInterval);
+    setAutoCaptureInterval(null);
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <Camera
-        style={{ flex: 1 }}
-        type={Camera.Constants.Type.back}
-        ref={cameraRef}
-        onCameraReady={() => console.log('Camera is ready')}
-      />
-      
-      <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20, backgroundColor: "white" }}>
-        <Text>Your React Native App</Text>
-        <View style={{backgroundColor: "white"}}>
-          <Text>Predictions:</Text>
+      <View style={{ flex: 0.7}}>
+        <Camera
+          style={{ flex: 1 }}
+          type={cameraType}
+          ref={cameraRef}
+          onCameraReady={() => console.log('Camera is ready')}
+        />
+      </View>
+
+      <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 5, backgroundColor: "white", alignItems: "center" }}>
+        <View style={{backgroundColor: "white", flexDirection: "row" }}>
+          {capturedImage && (
+            <Image
+            source={{ uri: capturedImage }}
+            style={{ width: 80, height: 80, margin: 10 }}
+            />
+          )}
           {predictions.map((prediction, index) => (
-            <View key={index}>
+            <View key={index} style={{alignItems: 'center', marginTop: 10}}>
+              <Text>Predictions:</Text>
               <Text>Confidences: {prediction.confidences.join(', ')}</Text>
               <Text>Display Names: {prediction.displayNames.join(', ')}</Text>
               <Text>IDs: {prediction.ids.join(', ')}</Text>
@@ -152,23 +167,25 @@ const Test = () => {
           ))}
         </View>
 
-        {/* Display the captured image if available */}
-        {capturedImage && (
-          <Image
-            source={{ uri: capturedImage }}
-            style={{ width: 200, height: 200, marginBottom: 10 }}
-          />
-        )}
 
-        {/* Button to open the camera */}
-        <TouchableOpacity onPress={openCamera} style={{ padding: 10, backgroundColor: 'blue', borderRadius: 5, marginBottom: 10 }}>
-          <Text style={{ color: 'white' }}>Take Photo</Text>
-        </TouchableOpacity>
-
-        {/* Button to make the API request */}
-        <TouchableOpacity onPress={makeApiRequest} style={{ padding: 10, backgroundColor: 'green', borderRadius: 5 }}>
-          <Text style={{ color: 'white' }}>Make API Request</Text>
-        </TouchableOpacity>
+        <ScrollView horizontal >
+          <View style={{alignItems: "center"}}>
+            <TouchableOpacity onPress={openCamera} style={{ padding: 10, backgroundColor: 'blue', borderRadius: 5, margin: 5, width: 140 }}>
+              <Text style={{ color: 'white', fontSize: 15, textAlign: "center" }}>Check Posture</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={toggleCameraType} style={{ padding: 10, backgroundColor: 'orange', borderRadius: 5, margin: 5, width: 140 }}>
+              <Text style={{ color: 'white', fontSize: 15, textAlign: "center" }}>Flip Camera</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{alignItems: "center", alignSelf: "center"}}>
+            <TouchableOpacity onPress={startAutoCapture} style={{ padding: 10, backgroundColor: 'purple', borderRadius: 5, margin: 5, width: 140 }}>
+              <Text style={{ color: 'white', fontSize: 15, textAlign: "center" }}>Auto Capture</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={stopAutoCapture} style={{ padding: 10, backgroundColor: 'red', borderRadius: 5, margin: 5, width: 140 }}>
+              <Text style={{ color: 'white', fontSize: 15, textAlign: "center" }}>Stop Capture</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </View>
     </View>
   );

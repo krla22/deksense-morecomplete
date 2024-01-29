@@ -175,7 +175,7 @@ const App = () => {
               <Ionicons name="cloudy" size={size} color={color} />
             )
           }}/>
-          <Drawer.Screen name="Test" component={Test} />
+          <Drawer.Screen name="Posture Check" component={Test} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

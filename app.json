@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.krla22.testdesksense"
+      "package": "com.desksense.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"

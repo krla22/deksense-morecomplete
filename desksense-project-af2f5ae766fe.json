@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "desksense-project",
+  "private_key_id": "af2f5ae766fe5364e47090b954b95bbd64032463",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDO8G4PW+xlaCDx\nBHRtpUoIR4iKiGwRc+ILyJMfVq2w+Rz5vpnlHFSi82oRZiW3k7g/fSwUY/fL8+sw\nOFi2MsqzfIl2ffpfGKx0fdwG+cJdLUk5ElukyOFdc/uWJY5j9yaYhYjlK+ZHA3ir\n/9fsHr0ihzUlkbfbOVwygAQ1Sk4bBYSuhIfIv2rhUGG/tmJwaM7J2BibWrKvTrE7\nK2kScWtx6HQl3MvUE/pNifAVkfPhdsKmo8kn2FyZQ59pXQDRJQKWOxSTf8qjPb8R\nN9cqpbIwI0OJ4eTfB9DYCr3/ap+p0VMTyU3l1yqVhnZ26Q5fi+7iV4GUksX7cCBz\nvoW17bFZAgMBAAECggEAJaUTQHQGcwQYSf/3diLFbvAkZJ8gmaQtENux99d6zWDj\n5oLH2CfpNaN2PigI4HZc5B/PLv5oi4+ZzzHQ4YQn37LeBtIwA7CnXqGurw4sT2r3\nkQxH45gvdyKsN8opNwI04TYZiycLQwvcnd1y2B9XZLqX7netrJGotf8XxOH5h2yL\nylDXTJDghrKba+KNblXtPAcq7E8HZKpWsc6by6jt81fMrCU8RtR90PqKNtkLPYcQ\nHvK9H0Ko/DHs8X+s32GuGrtsu3t+fIl+Z7YIaJk9WjeQgoDoXUbitc2hpPnlQ4oj\nrXmh6ycq4wMMaZLFYKrLgZyBqZZBOGp8FWHrz5wuCQKBgQDsroKeTdvRlbS331DC\nVH1u7jxZqrohcvOakmaeKFF5d0YLtAvEqAV94mDRtm+FfL3cEwUOlCx+INnqeqQm\n0J/DmG3Uvpe7GNQwK+raVTQBl6TsofE8AUcuKATYjetML2rExHa5flAT7wCnVQmp\nbirm5H4U6mKHkmOBGjx+4Z2bkwKBgQDf1HJlODu+POVxInK9FBL6zqxNcgYj/Pk6\njw8j73o5x1HMYXTFdq4PDAcqc9mt2ucTMnVI2zlIySyoBKdzVr5rAIR3ukZ0zmVf\nSS7sSTvLO9b2yrTcRLWvQYQgOR6QYy4DWHEgkAuTUX3KZRmxvfgcYdOvcYtxgGAO\nMhVkHiMK4wKBgGcLb1jmwv6TtDOdqXaB/H5wgJv1ZcYsWv0AImdXXGmK0VdFEx6S\nnJl7FvYW/KTcc3i+WyRGxLxBJz8cGB3CFNy+n4rRVBQkMjWq2TwnflX3JNnVg8bB\nM7FXwQxbdYcc2dpDQwFtigWzt9AiiOtYSJtv/aizhyRJSsMpng8LwWe7AoGAZexk\n5yizM86hIGJyYx1IA0OnfGCm4S5qAztvxopfWv4jhnD+boi7fAibHr7AagWbYceB\nVtrU/Ar3tc7gvYnLjggfSjHdsYTm7nvxzREQFFy8Z4co0oDLRvILi2zXOSKgqk9U\nvGI7kyrxn/9nsuNxnuMBNQv8VoQBuZUe3odGp8cCgYB/YZVV8XnOJOx3q8WCP4Bm\ntl5VOnt9ihhm2gWwG45Qu9YuCVyURUWpV5zilw+dKddp9M7mLlA1ZJzk08zs2MR+\nHnbtHn6Tva8PUOxqsk+qWZmKvOgdOdSryH9x7e2bzY667zUrViTMw1d/7XKwchVl\nI3H97VwuYa9gugj5aqrJmw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "antoniokurtrobin@desksense-project.iam.gserviceaccount.com",
+  "client_id": "111341209379346203596",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/antoniokurtrobin%40desksense-project.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
