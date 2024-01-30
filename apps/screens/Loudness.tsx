@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground } from 'react-native';
+=======
+import { View, Text, FlatList, ScrollView, ImageBackground } from 'react-native';
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
 =======
 import { View, Text, FlatList, ScrollView, ImageBackground } from 'react-native';
 >>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
@@ -143,6 +147,7 @@ const Loudness = () => {
     style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <ScrollView style={styles.outerContainer}>
 <<<<<<< HEAD
+<<<<<<< HEAD
         {hasZeroRating ? (
           // Loading view when there's a rating of zero in the history
           <View style={styles.loadingContainer}>
@@ -186,6 +191,8 @@ const Loudness = () => {
           </>
         )}
 =======
+=======
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
         <View style={styles.middleContainer}>
           <Text style={styles.dataTitle}>Loudness</Text>
         </View>
@@ -217,6 +224,9 @@ const Loudness = () => {
           />
         </View>
         <View style={{ marginBottom: 20 }}></View>
+<<<<<<< HEAD
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
+=======
 >>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
       </ScrollView>
     </ImageBackground>

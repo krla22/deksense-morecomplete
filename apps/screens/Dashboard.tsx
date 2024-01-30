@@ -85,6 +85,7 @@ const Dashboard = () => {
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     return (
       <ImageBackground
       source={require('../../assets/bgimage.png')}
@@ -99,6 +100,8 @@ const Dashboard = () => {
             <View style={{flexDirection:"row", marginTop: 10, gap: 10}}>
               <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#91e8fa"}}>
 =======
+=======
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
     return (    
     // <ScrollView style={{flex: 1, borderWidth: 1, borderColor: 'black'}}>
     <ImageBackground
@@ -179,6 +182,9 @@ const Dashboard = () => {
           <View style={{alignItems: 'center', borderRadius: 20, padding: 1}}>
             <View style={{flexDirection:"row", marginTop: 10, gap: 10}}>
               <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
+<<<<<<< HEAD
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
+=======
 >>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
                 <View style={{alignSelf: "center"}}>
                   <Image style={{width: 50, height: 50}} source={{uri: 'https://cdn.discordapp.com/attachments/1194934283433943050/1197838179726798878/Temperature.png?ex=65bcb8bc&is=65aa43bc&hm=df8c2c870700caee8f1e9335eb03a4e31b371c239b0fd309c3ed1306789fa6f5&' }} />
@@ -199,7 +205,11 @@ const Dashboard = () => {
               </View>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
               <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#91e8fa"}}>
+=======
+              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
 =======
               <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
 >>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
@@ -224,7 +234,11 @@ const Dashboard = () => {
 
             <View style={{flexDirection:"row", marginTop: 10, marginBottom: 20, gap: 10}}>
 <<<<<<< HEAD
+<<<<<<< HEAD
               <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#91e8fa"}}>
+=======
+              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
 =======
               <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
 >>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
@@ -247,7 +261,11 @@ const Dashboard = () => {
               </View>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
               <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#91e8fa"}}>
+=======
+              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
 =======
               <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
 >>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
@@ -273,17 +291,23 @@ const Dashboard = () => {
             <View style={{alignItems: "center", borderTopWidth: 1, borderBottomWidth: 1, borderColor: "black", marginBottom: 10}}>
               <Text style={{fontWeight: "bold"}}>Want to learn more for your health?</Text>
 <<<<<<< HEAD
+<<<<<<< HEAD
             </View>
 
             <ScrollView
               horizontal
               style={{ marginRight: 10, marginLeft: 10 }}
 =======
+=======
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
             </View> */}
 
             <ScrollView
               horizontal
               style={{ marginRight: 10, marginLeft: 10, paddingBottom: 20 }}
+<<<<<<< HEAD
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
+=======
 >>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
               snapToOffsets={snapOffsets}
               decelerationRate="fast"

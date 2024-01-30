@@ -77,8 +77,8 @@ const Test = () => {
     if (processedImageUri) {
       console.log('Processed Image URI:', processedImageUri);
 
-      const ENDPOINT_ID = '8547807903493390336';
-      const PROJECT_ID = '241313517878';
+      const ENDPOINT_ID = '8171194384654532608';
+      const PROJECT_ID = '834745453959';
 
       const data = {
         instances: [

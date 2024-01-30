@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { View, Text, FlatList, ScrollView, ActivityIndicator, AppState, ImageBackground  } from 'react-native';
+=======
+import { View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground } from 'react-native';
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
 =======
 import { View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground } from 'react-native';
 >>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
@@ -168,8 +172,13 @@ const Temperature = () => {
   return (
     <ImageBackground
 <<<<<<< HEAD
+<<<<<<< HEAD
       source={require('../../assets/bgimage.png')}
       style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}> 
+=======
+    source={require('../../assets/bgimage.png')}
+    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
 =======
     source={require('../../assets/bgimage.png')}
     style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

@@ -129,6 +129,7 @@ const App = () => {
   return (
     <NavigationContainer>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <Drawer.Navigator initialRouteName='Welcome' screenOptions={{drawerStyle:{backgroundColor: "lightgrey"}}} drawerContent={CustomDrawerContent}>
         <Drawer.Screen name="Welcome" component={Welcome} options={{headerShown: false, swipeEnabled: false, drawerItemStyle: { display: 'none'}}}/>
         <Drawer.Screen name="Home" component={Home} options={{headerShown: false, swipeEnabled: false, drawerItemStyle: { display: 'none'}}}/>
@@ -138,6 +139,8 @@ const App = () => {
             )}} />
         <Drawer.Screen name="Profile" component={Profile} options={{drawerItemStyle: { display: 'none' }, headerStyle: {backgroundColor:"#91e8fa"}}}/>
 =======
+=======
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
       <Drawer.Navigator screenOptions={{drawerStyle:{backgroundColor: "#91e8fa"}}} drawerContent={CustomDrawerContent} initialRouteName='Welcome' >
         <Drawer.Screen name="Welcome" component={Home} options={{headerShown: false, drawerItemStyle: { display: 'none'}}}/>
         <Drawer.Screen name="Basic View" component={Simple} options={{headerShown: false, 
@@ -196,7 +199,10 @@ const App = () => {
             )
             }}/>
 <<<<<<< HEAD
+<<<<<<< HEAD
           
+=======
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
 =======
 >>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
       </Drawer.Navigator>

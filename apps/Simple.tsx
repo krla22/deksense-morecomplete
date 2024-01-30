@@ -231,6 +231,7 @@ const Simple = () => {
                         </View>
                     </View>
 <<<<<<< HEAD
+<<<<<<< HEAD
                     </View>
                 </View>
 
@@ -246,6 +247,19 @@ const Simple = () => {
                         </View>
                     </View>
 
+=======
+                    
+                    {/* <View style={{borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
+                        <View style={{alignSelf: "center"}}>
+                        <Image style={{width: 50, height: 50}} source={{uri: 'https://cdn.discordapp.com/attachments/1194934283433943050/1197838179726798878/Temperature.png?ex=65bcb8bc&is=65aa43bc&hm=df8c2c870700caee8f1e9335eb03a4e31b371c239b0fd309c3ed1306789fa6f5&' }} />
+                        </View>
+                        <View style={{alignSelf: "center"}}>
+                        <Text >Temperature</Text>
+                        <Text style={{alignSelf: "center"}}>{temperatureRating}°C</Text>
+                        </View>
+                    </View>
+
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
                     <View style={{borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
                     <View style={{alignSelf: "center"}}>
                         <Image style={{width: 50, height: 50}} source={{uri: 'https://media.discordapp.net/attachments/1194934283433943050/1197836883321962558/Humidity.png?ex=65bcb787&is=65aa4287&hm=c9897fa676ab889acf3e2b7276b60ed8765bfd55d1c5eb08a13b79bcf67350e4&=&format=webp&quality=lossless&width=640&height=640' }} />
@@ -280,6 +294,9 @@ const Simple = () => {
                     </View>
                 </View>
 
+<<<<<<< HEAD
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
+=======
 >>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
                 <TouchableOpacity onPress={navigateToDashboard} style={{alignSelf: "center", backgroundColor: "green", width: 130, height: 35, borderTopRightRadius: 10, borderTopLeftRadius: 10}}>
                     <Text style={{textAlign: "center", paddingTop: 7, color: "white"}}>
