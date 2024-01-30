@@ -83,27 +83,7 @@ const Dashboard = () => {
 
     const snapOffsets = Array.from({ length: videos.length }, (_, i) => i * windowWidth);
 
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-    return (
-      <ImageBackground
-      source={require('../../assets/bgimage.png')}
-      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <ScrollView style={{flex: 1}}>
-        <View style={{marginTop: 10}}>
-          <View style={{borderWidth: 1, borderColor: "black", borderRadius: 20, alignSelf: "center", width: 310, padding: 10, backgroundColor: "#CB905A"}}>
-            <Text style={{alignSelf: "center", fontSize: 30, fontWeight: "bold"}}>Welcome back!</Text>
-          </View>
-
-          <View style={{alignItems: 'center', borderRadius: 20, padding: 1}}>
-            <View style={{flexDirection:"row", marginTop: 10, gap: 10}}>
-              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#91e8fa"}}>
-=======
-=======
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
     return (    
-    // <ScrollView style={{flex: 1, borderWidth: 1, borderColor: 'black'}}>
     <ImageBackground
       source={require('../../assets/bgimage.png')}
       style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -173,142 +153,9 @@ const Dashboard = () => {
           <View style={{ alignItems: "center", borderTopWidth: 2, borderBottomWidth: 2, borderColor: "gray", marginBottom: 20 }}>
             <Text style={{ fontWeight: "bold" }}>Want to learn more for your health?</Text>
           </View>
-          
-        {/* <View style={{marginTop: 10}}>
-          <View style={{borderWidth: 1, borderColor: "black", borderRadius: 20, alignSelf: "center", width: 310, padding: 10, backgroundColor: "#91e8fa"}}>
-            <Text style={{alignSelf: "center", fontSize: 30, fontWeight: "bold"}}>Welcome back!</Text>
-          </View>
-
-          <View style={{alignItems: 'center', borderRadius: 20, padding: 1}}>
-            <View style={{flexDirection:"row", marginTop: 10, gap: 10}}>
-              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
-<<<<<<< HEAD
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
-=======
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
-                <View style={{alignSelf: "center"}}>
-                  <Image style={{width: 50, height: 50}} source={{uri: 'https://cdn.discordapp.com/attachments/1194934283433943050/1197838179726798878/Temperature.png?ex=65bcb8bc&is=65aa43bc&hm=df8c2c870700caee8f1e9335eb03a4e31b371c239b0fd309c3ed1306789fa6f5&' }} />
-                </View>
-                <View style={{alignSelf: "center", alignItems: "center"}}>
-                  <Text>Temperature</Text>
-                  <Text>{temperatureRating}°C</Text>
-                  <Text 
-                    style={{
-                      alignSelf: "center", 
-                      padding: 10, 
-                      justifyContent: "center",
-                      textAlign: "center"
-                    }}>
-                    {temperatureComment}
-                  </Text>
-                </View>
-              </View>
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#91e8fa"}}>
-=======
-              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
-=======
-              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
-              <View style={{alignSelf: "center"}}>
-                  <Image style={{width: 50, height: 50}} source={{uri: 'https://media.discordapp.net/attachments/1194934283433943050/1197836883321962558/Humidity.png?ex=65bcb787&is=65aa4287&hm=c9897fa676ab889acf3e2b7276b60ed8765bfd55d1c5eb08a13b79bcf67350e4&=&format=webp&quality=lossless&width=640&height=640' }} />
-                </View>
-                <View style={{alignSelf: "center", alignItems: "center"}}>
-                  <Text>Humidity</Text>
-                  <Text>{humidityRating}%</Text>
-                  <Text 
-                    style={{
-                      alignSelf: "center", 
-                      padding: 10, 
-                      justifyContent: "center",
-                      textAlign: "center"
-                    }}>
-                    {humidityComment}
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-            <View style={{flexDirection:"row", marginTop: 10, marginBottom: 20, gap: 10}}>
-<<<<<<< HEAD
-<<<<<<< HEAD
-              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#91e8fa"}}>
-=======
-              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
-=======
-              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
-                <View style={{alignSelf: "center"}}>
-                  <Image style={{width: 50, height: 50}} source={{uri: 'https://media.discordapp.net/attachments/1194934283433943050/1197836883586195496/Loudness.png?ex=65bcb787&is=65aa4287&hm=f5fe1850d7851ef2987a823d1c991692a6a60f09d1948f7bb058efb5fb6218aa&=&format=webp&quality=lossless&width=640&height=640' }} />
-                </View>
-                <View style={{alignSelf: "center", alignItems: "center"}}>
-                  <Text>Loudness</Text>
-                  <Text>{loudnessRating}dB</Text>
-                  <Text 
-                    style={{
-                      alignSelf: "center", 
-                      padding: 10, 
-                      justifyContent: "center",
-                      textAlign: "center"
-                    }}>
-                    {loudnessComment} 
-                  </Text>
-                </View>
-              </View>
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#91e8fa"}}>
-=======
-              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
-=======
-              <View style={{height: 190, borderWidth: 1, borderColor: "black", borderRadius: 20, padding: 10, alignSelf: "center", width: 150, backgroundColor: "#f7e4bd"}}>
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
-                <View style={{alignSelf: "center"}}>
-                  <Image style={{width: 50, height: 50, }} source={{uri: 'https://cdn.discordapp.com/attachments/1194934283433943050/1197798223906082816/kisspng-poor-posture-human-back-low-back-pain-middle-back-old-how-it-works-study-in-australia-information-5b716872143556.7840094615341589620828.png?ex=65bc9386&is=65aa1e86&hm=745f6e11519e89b3f6339e97dce09f359114b0f15acab04ed550c1896c1a2dc9&' }} />
-                </View>
-                <View style={{alignSelf: "center"}}>
-                  <Text style={{alignSelf: "center"}}>Posture</Text>
-                  <Text style={{alignSelf: "center"}}>{postureRating}/10</Text>
-                  <Text 
-                    style={{
-                      alignSelf: "center", 
-                      padding: 10, 
-                      justifyContent: "center",
-                      textAlign: "center"
-                    }}>
-                    {postureComment}
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-            <View style={{alignItems: "center", borderTopWidth: 1, borderBottomWidth: 1, borderColor: "black", marginBottom: 10}}>
-              <Text style={{fontWeight: "bold"}}>Want to learn more for your health?</Text>
-<<<<<<< HEAD
-<<<<<<< HEAD
-            </View>
-
-            <ScrollView
-              horizontal
-              style={{ marginRight: 10, marginLeft: 10 }}
-=======
-=======
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
-            </View> */}
-
             <ScrollView
               horizontal
               style={{ marginRight: 10, marginLeft: 10, paddingBottom: 20 }}
-<<<<<<< HEAD
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
-=======
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
               snapToOffsets={snapOffsets}
               decelerationRate="fast"
               showsHorizontalScrollIndicator={false}

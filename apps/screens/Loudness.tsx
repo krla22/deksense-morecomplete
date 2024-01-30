@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground } from 'react-native';
-=======
-import { View, Text, FlatList, ScrollView, ImageBackground } from 'react-native';
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
-=======
-import { View, Text, FlatList, ScrollView, ImageBackground } from 'react-native';
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
 import styles from '../../stylesheets/datastyles';
 import { FIREBASE_AUTH, FIRESTORE_DB, REALTIME_DB } from '../../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
@@ -146,8 +138,6 @@ const Loudness = () => {
     source={require('../../assets/bgimage.png')}
     style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <ScrollView style={styles.outerContainer}>
-<<<<<<< HEAD
-<<<<<<< HEAD
         {hasZeroRating ? (
           // Loading view when there's a rating of zero in the history
           <View style={styles.loadingContainer}>
@@ -190,44 +180,6 @@ const Loudness = () => {
             </View>
           </>
         )}
-=======
-=======
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
-        <View style={styles.middleContainer}>
-          <Text style={styles.dataTitle}>Loudness</Text>
-        </View>
-
-        <View style={styles.middleContainer}>
-          <View style={styles.innerContainer}>
-            <Text style={styles.historyText}>Decibel Level</Text>
-            <Text style={styles.dataRating}>Rating: {loudnessRating}dB</Text>
-            <Text style={styles.dataComment}>{loudnessComment}</Text>
-          </View>
-          <View style={styles.innerContainer}>
-            <View style={styles.averageRatingContainer}>
-              <Text style={styles.dataRating}>Average Rating: {Math.round(averageRating)}dB</Text>
-              <Text style={styles.dataComment}>{averageComment}</Text>
-            </View>    
-          </View>
-        </View>
-
-        <View style={styles.historyContainer}>
-          <Text style={styles.historyText}>History</Text>
-          <FlatList
-            data={loudnessHistory.slice().reverse()}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.historyDataContainer}>
-                <Text style={styles.dataRating}>{`Decible Levels: ${item.rating}dB`}</Text>
-              </View>
-            )}
-          />
-        </View>
-        <View style={{ marginBottom: 20 }}></View>
-<<<<<<< HEAD
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
-=======
->>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
       </ScrollView>
     </ImageBackground>
   );
