@@ -104,7 +104,7 @@ const Dashboard = () => {
               <View style={{ alignSelf: "center" }}>
                 <Text style={{ alignSelf: "center" }}>Posture</Text>
                 <Text style={{ alignSelf: "center" }}>{postureRating}/10</Text>
-                <Text style={{ alignSelf: "center", padding: 10, justifyContent: "center", textAlign: "center" }}>
+                <Text style={{ alignSelf: "center", padding: 5, justifyContent: "center", textAlign: "center" }}>
                   {postureComment}
                 </Text>
               </View>
@@ -117,7 +117,7 @@ const Dashboard = () => {
               <View style={{ alignSelf: "center", alignItems: "center" }}>
                 <Text>Temperature</Text>
                 <Text>{temperatureRating}°C</Text>
-                <Text style={{ alignSelf: "center", padding: 10, justifyContent: "center", textAlign: "center" }}>
+                <Text style={{ alignSelf: "center", padding: 5, justifyContent: "center", textAlign: "center" }}>
                   {temperatureComment}
                 </Text>
               </View>
@@ -132,7 +132,7 @@ const Dashboard = () => {
               <View style={{ alignSelf: "center", alignItems: "center" }}>
                 <Text>Loudness</Text>
                 <Text>{loudnessRating}dB</Text>
-                <Text style={{ alignSelf: "center", padding: 10, justifyContent: "center", textAlign: "center" }}>
+                <Text style={{ alignSelf: "center", padding: 5, justifyContent: "center", textAlign: "center" }}>
                   {loudnessComment}
                 </Text>
               </View>
@@ -145,7 +145,7 @@ const Dashboard = () => {
               <View style={{ alignSelf: "center", alignItems: "center" }}>
                 <Text>Humidity</Text>
                 <Text>{humidityRating}%</Text>
-                <Text style={{ alignSelf: "center", padding: 10, justifyContent: "center", textAlign: "center" }}>
+                <Text style={{ alignSelf: "center", padding: 5, justifyContent: "center", textAlign: "center" }}>
                   {humidityComment}
                 </Text>
               </View>
