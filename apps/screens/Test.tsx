@@ -31,6 +31,7 @@ const Test = () => {
         if (docSnap.exists()) {
           const data = docSnap.data();
           setAccessToken(data.accessTokens);
+          console.log('Access token retrieved')
         } else {
           console.log('No such document!');
         }
@@ -62,7 +63,7 @@ const Test = () => {
         });
         console.log('Base64 Image Converted');
 
-        setCapturedImage(resizedImage.uri); // Update the state with the processed image URI
+        await setCapturedImage(resizedImage.uri); // Update the state with the processed image URI
 
         // Call makeApiRequest with the processed image
         await makeApiRequest(resizedImage.uri, imageBase64);
@@ -76,8 +77,8 @@ const Test = () => {
     if (processedImageUri) {
       console.log('Processed Image URI:', processedImageUri);
 
-      const ENDPOINT_ID = '8171194384654532608';
-      const PROJECT_ID = '834745453959';
+      const ENDPOINT_ID = '8547807903493390336';
+      const PROJECT_ID = '241313517878';
 
       const data = {
         instances: [
@@ -149,7 +150,7 @@ const Test = () => {
         />
       </View>
 
-      <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 5, backgroundColor: "white", alignItems: "center" }}>
+      <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 5, alignItems: "center" }}>
         <View style={{backgroundColor: "white", flexDirection: "row" }}>
           {capturedImage && (
             <Image

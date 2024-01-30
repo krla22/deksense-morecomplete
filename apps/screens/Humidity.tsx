@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground } from 'react-native';
 import styles from '../../stylesheets/datastyles';
 import { FIREBASE_AUTH, FIRESTORE_DB, REALTIME_DB } from '../../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
@@ -134,50 +134,54 @@ const Humidity = () => {
   ];
 
   return (
-    <ScrollView style={styles.outerContainer}>
-      {hasZeroRating ? (
-        // Loading view when there's a rating of zero in the history
-        <View style={styles.loadingContainer}>
-          <View style={styles.innerContainer}>
-              <Text style={styles.historyText}>Current Humidity</Text>
-              <Text style={styles.dataRating}>Rating: {humidityRating}°C</Text>
-              <Text style={styles.dataComment}>{humidityComment}</Text>
-            </View>
-          <Text style={styles.loadingText}>Gathering temperature readings...</Text>
-          <ActivityIndicator size="large" />
-        </View>
-      ) : (
-        // Display humidity data
-        <>
-          <View style={styles.middleContainer}>
+    <ImageBackground
+      source={require('../../assets/bgimage.png')}
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>  
+      <ScrollView style={styles.outerContainer}>
+        {hasZeroRating ? (
+          // Loading view when there's a rating of zero in the history
+          <View style={styles.loadingContainer}>
             <View style={styles.innerContainer}>
-              <Text style={styles.historyText}>Humidity Level</Text>
-              <Text style={styles.dataRating}>Rating: {humidityRating}%</Text>
-              <Text style={styles.dataComment}>{humidityComment}</Text>
-            </View>
-            <View style={styles.innerContainer}>
-              <View style={styles.averageRatingContainer}>
-                <Text style={styles.dataRating}>Average Rating: {Math.round(averageRating)}%</Text>
-                <Text style={styles.dataComment}>{averageComment}</Text>
-              </View>    
-            </View>
+                <Text style={styles.historyText}>Current Humidity</Text>
+                <Text style={styles.dataRating}>Rating: {humidityRating}°C</Text>
+                <Text style={styles.dataComment}>{humidityComment}</Text>
+              </View>
+            <Text style={styles.loadingText}>Gathering temperature readings...</Text>
+            <ActivityIndicator size="large" />
           </View>
+        ) : (
+          // Display humidity data
+          <>
+            <View style={styles.middleContainer}>
+              <View style={styles.innerContainer}>
+                <Text style={styles.historyText}>Humidity Level</Text>
+                <Text style={styles.dataRating}>Rating: {humidityRating}%</Text>
+                <Text style={styles.dataComment}>{humidityComment}</Text>
+              </View>
+              <View style={styles.innerContainer}>
+                <View style={styles.averageRatingContainer}>
+                  <Text style={styles.dataRating}>Average Rating: {Math.round(averageRating)}%</Text>
+                  <Text style={styles.dataComment}>{averageComment}</Text>
+                </View>    
+              </View>
+            </View>
 
-          <View style={styles.historyContainer}>
-            <Text style={styles.historyText}>History</Text>
-            <FlatList
-              data={humidityHistory.slice().reverse()}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
-                <View style={styles.historyDataContainer}>
-                  <Text style={styles.dataRating}>{`Humidity Level: ${item.rating !== null ? `${item.rating}%` : 0}`}</Text>
-                </View>
-              )}
-            />
-          </View>
-        </>
-      )}
-    </ScrollView>
+            <View style={styles.historyContainer}>
+              <Text style={styles.historyText}>History</Text>
+              <FlatList
+                data={humidityHistory.slice().reverse()}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <View style={styles.historyDataContainer}>
+                    <Text style={styles.dataRating}>{`Humidity Level: ${item.rating !== null ? `${item.rating}%` : 0}`}</Text>
+                  </View>
+                )}
+              />
+            </View>
+          </>
+        )}
+      </ScrollView>
+    </ImageBackground>
   );
 };
 

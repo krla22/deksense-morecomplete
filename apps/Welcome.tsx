@@ -1,176 +1,115 @@
-import { View, Text, TextInput, Button, ScrollView, ActivityIndicator } from 'react-native';
-import React,  { useEffect, useState } from 'react';
-import styles from '../stylesheets/loginstyle';
-import 'react-native-gesture-handler';
-import AuthenticatedScreen from './Simple';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
-import { FIREBASE_APP, FIRESTORE_DB, REALTIME_DB } from '../firebaseConfig';
-import { collection, doc, setDoc, getDoc, ref, set, get } from 'firebase/firestore';
-import { push, ref as rtdbRef, set as rtdbSet } from 'firebase/database';
+import { View, Text, ScrollView, Dimensions, ImageBackground, Image, TouchableOpacity } from 'react-native'
+import React, { useRef } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useNavigation } from '@react-navigation/native';
 
-const AuthScreen = ({ email, setEmail, password, setPassword, isLogin, setIsLogin, handleAuthentication, username, setUsername, isLoading }: any) => {
-  return (
-    <View style={styles.overallContainer}>
-      <View style={styles.authContainer}>
-        <Text style={styles.welcome}>Welcome to Desksense</Text>
-        <Text style={styles.title}>{isLogin ? 'Sign In' : 'Sign Up'}</Text>
-        
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          placeholder="Email"
-          autoCapitalize="none"
-        />
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
-        {!isLogin && (
-          <TextInput
-            style={styles.input}
-            value={username}
-            onChangeText={setUsername}
-            placeholder="Username"
-            autoCapitalize="none"
-          />
-        )}
+const Welcome = () => {
+  const navigation = useNavigation();
+  const scrollViewRef = useRef(null);
 
-        <TextInput
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-          placeholder="Password"
-          secureTextEntry
-        />
-        <View style={styles.buttonContainer}>
-          <Button title={isLogin ? 'Sign In' : 'Sign Up'} onPress={handleAuthentication} color="#3498db" />
-        </View>
-
-        {isLoading && <ActivityIndicator size="large" color="#3498db" />}
-        
-        <View style={styles.bottomContainer}>
-          <Text style={styles.toggleText} onPress={() => setIsLogin(!isLogin)}>
-            {isLogin ? 'Need an account? Sign Up' : 'Already have an account? Sign In'}
-          </Text>
-        </View>
-      </View>
-    </View>
-  );
-}
-
-const Home = () => {
-  const auth = getAuth(FIREBASE_APP);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [user, setUser] = useState(null);
-  const [isLogin, setIsLogin] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user);
-
-      if (user) {
-        const userEmail = user.email;
-
-        // Check if the folder with user's email exists in the Realtime Database
-        const rtdbUserRef = rtdbRef(REALTIME_DB, userEmail);
-        const rtdbSnapshot = await get(rtdbUserRef);
-
-        if (!rtdbSnapshot.exists()) {
-          // If the folder doesn't exist, create it
-          await rtdbSet(rtdbUserRef, { username: username || '' });
-        }
-
-        // Check if the username is not null in the Firestore database
-        const retrieveDoc = doc(FIRESTORE_DB, 'users', userEmail);
-        const docSnapshot = await getDoc(retrieveDoc);
-
-        if (docSnapshot.exists()) {
-          const userData = docSnapshot.data();
-          const retrievedUsername = userData.username;
-          setUsername(retrievedUsername);
-        }
-
-        setIsLoading(false);
-      } else {
-        // User is not authenticated
-        setIsLoading(false);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [auth, username]);
-
-  const createDoc = async (email: string, username: string) => {
-    const addDoc = doc(collection(FIRESTORE_DB, 'users'), email);
-
-    await setDoc(addDoc, {
-      username,
-    });
-  }
-
-  const handleAuthentication = async () => {
-    try {
-      setIsLoading(true);
-
-      if (user) {
-        // If the user is already authenticated, log out
-        console.log('User logged out successfully!');
-        await signOut(auth);
-      } else {
-        // Sign in or sign up
-        if (isLogin) {
-          // Sign in
-          await signInWithEmailAndPassword(auth, email, password);
-          console.log('User signed in successfully!');
-        } else {
-          // Sign up
-          await createUserWithEmailAndPassword(auth, email, password);
-
-          // Create a new folder in the Realtime Database with user's email
-          const rtdbUserRef = rtdbRef(REALTIME_DB, username);
-          await rtdbSet(rtdbUserRef, { username });
-
-          // Create or update the user document in Firestore
-          const userDocRef = doc(FIRESTORE_DB, 'users', email);
-          await setDoc(userDocRef, { username });
-
-          console.log('User created successfully!');
-        }
-      }
-    } catch (error) {
-      console.error('Authentication error:', error);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleScrollToFirstView = () => {
+    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
   };
-
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {isLoading ? (
-        // Display loading indicator
-        <ActivityIndicator size="large" color="#3498db" />
-      ) : user ? (
-        // User is authenticated and has a username in the database
-        <AuthenticatedScreen handleAuthentication={handleAuthentication} />
-      ) : (
-        // User is not authenticated or does not have a username in the database
-        <AuthScreen
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
-          isLogin={isLogin}
-          setIsLogin={setIsLogin}
-          handleAuthentication={handleAuthentication}
-          username={username}
-          setUsername={setUsername}
-          isLoading={isLoading}
-        />
-      )}
-    </ScrollView>
-  );
+    <SafeAreaView>
+          <ScrollView horizontal pagingEnabled snapToInterval={windowWidth} decelerationRate="fast" showsHorizontalScrollIndicator={false} ref={scrollViewRef}> 
+          <ImageBackground 
+          source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201757729581182976/View1.png?ex=65cafb1a&is=65b8861a&hm=a07c25b27284cab1611767623d842d5ad356f295a15d3375395c9c02ff5dc250&=&format=webp&quality=lossless&width=602&height=935"}}
+          style={{width: windowWidth, height: windowHeight}}
+          >
+            <View style={{width: windowWidth, height: windowHeight, backgroundColor: "transparent", overflow: 'hidden'}}>
+              <Image 
+              style={{width: windowWidth - 50, height: 110, resizeMode: 'contain', alignSelf: "center", marginTop: 210}} 
+              source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201548970288234496/Title.png?ex=65ca38ae&is=65b7c3ae&hm=3ee58c2d1cd5481ac6d333892add523317133e860a045909d6037b2bdb0550ef&=&format=webp&quality=lossless&width=772&height=145"}} />
+              <View style={{gap: 30, alignItems: "center", flexDirection: "row", justifyContent: "center", marginTop: 30}}>
+                <TouchableOpacity 
+                  onPress={() => navigation.navigate('Home')}
+                  style={{backgroundColor: "#97d6d9", padding: 10, width: 120, height: 60, alignItems: "center", borderRadius: 10, justifyContent: "center"}}>
+                  <Text style={{color: "white", fontWeight: "bold", fontSize: 20}}>
+                    Enter
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{backgroundColor: "#97d6d9", padding: 10, width: 120, height: 60, alignItems: "center", borderRadius: 10, justifyContent: "center"}}>
+                  <Text style={{color: "white", fontWeight: "bold", fontSize: 20}}>
+                    Exit
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ImageBackground>
+
+          <ImageBackground style={{width: windowWidth, height: windowHeight}} source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201562999425617980/View2.png?ex=65ca45bf&is=65b7d0bf&hm=bcde910931d11880a8f21d34cc291a556c8feeac729673bfc592e2017bb9b0f4&=&format=webp&quality=lossless&width=602&height=936"}}>
+            <View style={{width: windowWidth, height: windowHeight, backgroundColor: "transparent"}}> 
+              <Image 
+              style={{width: windowWidth - 200, height: 110, resizeMode: 'contain', alignSelf: "center", marginTop: 750}} 
+              source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201566866926223450/TitleOutline.png?ex=65ca4959&is=65b7d459&hm=61c484447616db9b8d2edea0ddcf83b051df0e2ebb07cf72bcd7e4d39b63a3ff&=&format=webp&quality=lossless&width=768&height=142"}} />
+              <TouchableOpacity
+              onPress={handleScrollToFirstView}
+              style={{ position: 'absolute', bottom: 90, backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: 50, width: 30, height: 30, alignSelf: "center"}}>
+              <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16, textAlign: "center", marginTop: 2 }}>⇐</Text>
+              </TouchableOpacity> 
+            </View>
+          </ImageBackground>
+
+          <ImageBackground style={{width: windowWidth, height: windowHeight}} source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201573001964044318/View3.png?ex=65ca4f0f&is=65b7da0f&hm=88aa111737bdcc60e70f81f3b95dc1961ac01f742660349072e625a5119d65b9&=&format=webp&quality=lossless&width=602&height=936"}}>
+            <View style={{width: windowWidth, height: windowHeight, backgroundColor: "transparent"}}>
+              <Image 
+              style={{width: windowWidth - 200, height: 110, resizeMode: 'contain', alignSelf: "center", marginTop: 750}} 
+              source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201566866926223450/TitleOutline.png?ex=65ca4959&is=65b7d459&hm=61c484447616db9b8d2edea0ddcf83b051df0e2ebb07cf72bcd7e4d39b63a3ff&=&format=webp&quality=lossless&width=768&height=142"}} />
+            </View>
+            <TouchableOpacity
+              onPress={handleScrollToFirstView}
+              style={{ position: 'absolute', bottom: 90, backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: 50, width: 30, height: 30, alignSelf: "center"}}>
+              <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16, textAlign: "center", marginTop: 2 }}>⇐</Text>
+              </TouchableOpacity> 
+          </ImageBackground>
+
+          <ImageBackground style={{width: windowWidth, height: windowHeight}} source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201577835811311637/View4.png?ex=65ca5390&is=65b7de90&hm=02b618b2ec4d64db0c163b7ce1269b91b0bda64f1812b7ba41254a75fce94c1a&=&format=webp&quality=lossless&width=530&height=936"}}>
+            <View style={{width: windowWidth, height: windowHeight, backgroundColor: "transparent"}}>
+              <Image 
+              style={{width: windowWidth - 200, height: 110, resizeMode: 'contain', alignSelf: "center", marginTop: 750}} 
+              source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201566866926223450/TitleOutline.png?ex=65ca4959&is=65b7d459&hm=61c484447616db9b8d2edea0ddcf83b051df0e2ebb07cf72bcd7e4d39b63a3ff&=&format=webp&quality=lossless&width=768&height=142"}} />
+            </View>
+            <TouchableOpacity
+              onPress={handleScrollToFirstView}
+              style={{ position: 'absolute', bottom: 90, backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: 50, width: 30, height: 30, alignSelf: "center"}}>
+              <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16, textAlign: "center", marginTop: 2 }}>⇐</Text>
+              </TouchableOpacity> 
+          </ImageBackground>
+
+          <ImageBackground style={{width: windowWidth, height: windowHeight}} source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201580302762508419/View5.png?ex=65ca55dc&is=65b7e0dc&hm=890486afef541c60b40385f64b61803a1a530f9f7f4cf56b87d558d53c07b57c&=&format=webp&quality=lossless&width=530&height=936"}}>
+            <View style={{width: windowWidth, height: windowHeight, backgroundColor: "transparent"}}>
+              <Image 
+              style={{width: windowWidth - 200, height: 110, resizeMode: 'contain', alignSelf: "center", marginTop: 750}} 
+              source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201566866926223450/TitleOutline.png?ex=65ca4959&is=65b7d459&hm=61c484447616db9b8d2edea0ddcf83b051df0e2ebb07cf72bcd7e4d39b63a3ff&=&format=webp&quality=lossless&width=768&height=142"}} />
+            </View>
+            <TouchableOpacity
+              onPress={handleScrollToFirstView}
+              style={{ position: 'absolute', bottom: 90, backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: 50, width: 30, height: 30, alignSelf: "center"}}>
+              <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16, textAlign: "center", marginTop: 2 }}>⇐</Text>
+              </TouchableOpacity> 
+          </ImageBackground>
+
+          <ImageBackground style={{width: windowWidth, height: windowHeight}} source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201583143996624896/View6.png?ex=65ca5881&is=65b7e381&hm=8129aca8f97ba8c6dee8a824bcad752bfbb665b18415f783996145b7fead3f7b&=&format=webp&quality=lossless&width=530&height=936"}}>
+            <View style={{width: windowWidth, height: windowHeight, backgroundColor: "transparent"}}>
+              <Image 
+              style={{width: windowWidth - 200, height: 110, resizeMode: 'contain', alignSelf: "center", marginTop: 750}} 
+              source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201566866926223450/TitleOutline.png?ex=65ca4959&is=65b7d459&hm=61c484447616db9b8d2edea0ddcf83b051df0e2ebb07cf72bcd7e4d39b63a3ff&=&format=webp&quality=lossless&width=768&height=142"}} />
+            </View>
+            <TouchableOpacity
+              onPress={handleScrollToFirstView}
+              style={{ position: 'absolute', bottom: 90, backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: 50, width: 30, height: 30, alignSelf: "center"}}>
+              <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16, textAlign: "center", marginTop: 2 }}>⇐</Text>
+              </TouchableOpacity> 
+          </ImageBackground>
+          </ScrollView>
+        
+    </SafeAreaView>
+  )
 }
 
-export default Home;
+export default Welcome
 

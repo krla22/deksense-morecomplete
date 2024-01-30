@@ -1,0 +1,196 @@
+import { View, Text, TextInput, Button, ScrollView, ActivityIndicator, TouchableOpacity, ImageBackground } from 'react-native';
+import React,  { useEffect, useState } from 'react';
+import styles from '../stylesheets/loginstyle';
+import 'react-native-gesture-handler';
+import AuthenticatedScreen from './Simple';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
+import { FIREBASE_APP, FIRESTORE_DB, REALTIME_DB } from '../firebaseConfig';
+import { collection, doc, setDoc, getDoc, ref, set, get } from 'firebase/firestore';
+import { push, ref as rtdbRef, set as rtdbSet } from 'firebase/database';
+import { useNavigation } from '@react-navigation/native';
+
+const AuthScreen = ({ email, setEmail, password, setPassword, isLogin, setIsLogin, handleAuthentication, username, setUsername, isLoading }: any) => {
+  const navigation = useNavigation();
+  return (
+    <ImageBackground source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201780567314812998/aaditya-ailawadhi-oJatUsLoNuU-unsplash.jpg?ex=65cb105f&is=65b89b5f&hm=97ce8b7219f61533506e07f04de7c9f345d9f92db5e6c76b6daa23f764e2dbcd&=&format=webp&width=771&height=936"}}>
+    <View style={styles.overallContainer}>
+      <View style={styles.authContainer}>
+        
+        <Text style={styles.welcome}>Welcome to Desksense</Text>
+          
+        <Text style={styles.title}>{isLogin ? 'Sign In' : 'Sign Up'}</Text>
+        
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Email"
+          autoCapitalize="none"
+        />
+
+        {!isLogin && (
+          <TextInput
+            style={styles.input}
+            value={username}
+            onChangeText={setUsername}
+            placeholder="Username"
+            autoCapitalize="none"
+          />
+        )}
+
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Password"
+          secureTextEntry
+        />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={{backgroundColor: "#97d6d9", padding: 10, width: 70, alignItems: "center", borderRadius: 10}}
+            onPress={handleAuthentication}
+            disabled={isLoading}
+          >
+            <Text style={{color: "black", fontWeight: "bold"}}>{isLogin ? 'Sign In' : 'Sign Up'}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{backgroundColor: "#97d6d9", padding: 10, width: 70, alignItems: "center", borderRadius: 10}}
+            onPress={() => navigation.navigate('Welcome')}
+            disabled={isLoading}
+          >
+            <Text style={{color: "black", fontWeight: "bold"}}>Exit</Text>
+          </TouchableOpacity>
+        </View>
+
+        {isLoading && <ActivityIndicator size="large" color="#3498db" />}
+        
+        <View style={styles.bottomContainer}>
+          <Text style={styles.toggleText} onPress={() => setIsLogin(!isLogin)}>
+            {isLogin ? 'Need an account? Sign Up' : 'Already have an account? Sign In'}
+          </Text>
+        </View>
+      </View>
+    </View>
+    </ImageBackground>
+  );
+}
+
+const Home = () => {
+  const auth = getAuth(FIREBASE_APP);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [user, setUser] = useState(null);
+  const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setUser(user);
+
+      if (user) {
+        const userEmail = user.email;
+
+        // Check if the folder with user's email exists in the Realtime Database
+        const rtdbUserRef = rtdbRef(REALTIME_DB, userEmail);
+        const rtdbSnapshot = await get(rtdbUserRef);
+
+        if (!rtdbSnapshot.exists()) {
+          // If the folder doesn't exist, create it
+          await rtdbSet(rtdbUserRef, { username: username || '' });
+        }
+
+        // Check if the username is not null in the Firestore database
+        const retrieveDoc = doc(FIRESTORE_DB, 'users', userEmail);
+        const docSnapshot = await getDoc(retrieveDoc);
+
+        if (docSnapshot.exists()) {
+          const userData = docSnapshot.data();
+          const retrievedUsername = userData.username;
+          setUsername(retrievedUsername);
+        }
+
+        setIsLoading(false);
+      } else {
+        // User is not authenticated
+        setIsLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [auth, username]);
+
+  const createDoc = async (email: string, username: string) => {
+    const addDoc = doc(collection(FIRESTORE_DB, 'users'), email);
+
+    await setDoc(addDoc, {
+      username,
+    });
+  }
+
+  const handleAuthentication = async () => {
+    try {
+      setIsLoading(true);
+
+      if (user) {
+        // If the user is already authenticated, log out
+        console.log('User logged out successfully!');
+        await signOut(auth);
+      } else {
+        // Sign in or sign up
+        if (isLogin) {
+          // Sign in
+          await signInWithEmailAndPassword(auth, email, password);
+          console.log('User signed in successfully!');
+        } else {
+          // Sign up
+          await createUserWithEmailAndPassword(auth, email, password);
+
+          // Create a new folder in the Realtime Database with user's email
+          const rtdbUserRef = rtdbRef(REALTIME_DB, username);
+          await rtdbSet(rtdbUserRef, { username });
+
+          // Create or update the user document in Firestore
+          const userDocRef = doc(FIRESTORE_DB, 'users', email);
+          await setDoc(userDocRef, { username });
+
+          console.log('User created successfully!');
+        }
+      }
+    } catch (error) {
+      console.error('Authentication error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      {isLoading ? (
+        // Display loading indicator
+        <ActivityIndicator size="large" color="#3498db" />
+      ) : user ? (
+        // User is authenticated and has a username in the database
+        <AuthenticatedScreen handleAuthentication={handleAuthentication} />
+      ) : (
+        // User is not authenticated or does not have a username in the database
+        <AuthScreen
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          isLogin={isLogin}
+          setIsLogin={setIsLogin}
+          handleAuthentication={handleAuthentication}
+          username={username}
+          setUsername={setUsername}
+          isLoading={isLoading}
+        />
+      )}
+    </ScrollView>
+  );
+}
+
+export default Home;
+

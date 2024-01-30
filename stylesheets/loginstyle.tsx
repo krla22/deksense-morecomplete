@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f0f0f0',
       },
       overallContainer: {
-        backgroundColor: "lightgreen",
+        backgroundColor: "transparent",
         width: windowWidth,
         height: windowHeight,
         justifyContent: 'center',
@@ -21,9 +21,9 @@ const styles = StyleSheet.create({
       authContainer: {
         width: '80%',
         maxWidth: 400,
-        backgroundColor: '#fff',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
         padding: 16,
-        borderRadius: 8,
+        borderRadius: 50,
         elevation: 3,
       },
       title: {
@@ -33,14 +33,19 @@ const styles = StyleSheet.create({
       },
       input: {
         height: 40,
-        borderColor: '#ddd',
-        borderWidth: 1,
+        borderColor: '#97d6d9',
+        borderWidth: 2,
         marginBottom: 16,
         padding: 8,
+        width: windowWidth - 140,
         borderRadius: 4,
+        alignSelf: "center"
       },
       buttonContainer: {
-        marginBottom: 16,
+        flexDirection: "row",
+        gap: 20,
+        alignItems: "center",
+        justifyContent: "center"
       },
       toggleText: {
         color: '#3498db',

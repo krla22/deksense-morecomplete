@@ -12,7 +12,7 @@ import { FIREBASE_AUTH, FIRESTORE_DB, firebase } from './firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 import { doc, getDoc } from 'firebase/firestore';
 
-import Home from './apps/Welcome';
+import Welcome from './apps/Welcome';
 import Simple from './apps/Simple';
 import Dashboard from './apps/screens/Dashboard';
 import Profile from './apps/screens/ProfileScreen/Profile';
@@ -21,6 +21,7 @@ import Humidity from './apps/screens/Humidity';
 import Loudness from './apps/screens/Loudness';
 import Temperature from './apps/screens/Temperature';
 import Test from './apps/screens/Test';
+import Home from './apps/Home';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -36,7 +37,7 @@ function CustomDrawerContent(props: any) {
     try {
       await signOut(FIREBASE_AUTH);
       console.log('User logged out successfully!');
-      navigation.navigate('Welcome');
+      navigation.navigate('Home');
       // You may want to redirect the user to the login screen or perform other actions after logout.
     } catch (error) {
       console.error('Logout error:', error.message);
@@ -127,16 +128,16 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Drawer.Navigator screenOptions={{drawerStyle:{backgroundColor: "lightgrey"}}} drawerContent={CustomDrawerContent} initialRouteName='Welcome' >
-        <Drawer.Screen name="Welcome" component={Home} options={{headerShown: false, drawerItemStyle: { display: 'none'}}}/>
-        <Drawer.Screen name="Basic View" component={Simple} options={{headerShown: false, 
+      <Drawer.Navigator initialRouteName='Welcome' screenOptions={{drawerStyle:{backgroundColor: "lightgrey"}}} drawerContent={CustomDrawerContent}>
+        <Drawer.Screen name="Welcome" component={Welcome} options={{headerShown: false, swipeEnabled: false, drawerItemStyle: { display: 'none'}}}/>
+        <Drawer.Screen name="Home" component={Home} options={{headerShown: false, swipeEnabled: false, drawerItemStyle: { display: 'none'}}}/>
+        <Drawer.Screen name="Basic View" component={Simple} options={{headerShown: false,  swipeEnabled: false, 
           drawerIcon: ({ size, color }) => (
             <Ionicons name="book" size={size} color={color} />
-          )}} />
-        <Drawer.Screen name="Profile" component={Profile} options={{drawerItemStyle: { display: 'none' }, headerStyle: {backgroundColor:"lightgreen"}}}/>
-
+            )}} />
+        <Drawer.Screen name="Profile" component={Profile} options={{drawerItemStyle: { display: 'none' }, headerStyle: {backgroundColor:"#91e8fa"}}}/>
         <Drawer.Screen name="Dashboard" component={Dashboard} options={{
-            headerStyle: {backgroundColor:"lightgreen"}, 
+            headerStyle: {backgroundColor:"#91e8fa"}, 
             headerTintColor: "black", 
             drawerActiveTintColor:"black",
             drawerIcon: ({ size, color }) => (
@@ -144,7 +145,7 @@ const App = () => {
             )
           }}/>
         <Drawer.Screen name="Posture" component={Posture} options={{
-            headerStyle: {backgroundColor:"lightgreen"}, 
+            headerStyle: {backgroundColor:"#91e8fa"}, 
             headerTintColor: "black", 
             drawerActiveTintColor:"black",
             drawerIcon: ({ size, color }) => (
@@ -152,7 +153,7 @@ const App = () => {
             )
           }}/>
         <Drawer.Screen name="Temperature" component={Temperature} options={{
-            headerStyle: {backgroundColor:"lightgreen"}, 
+            headerStyle: {backgroundColor:"#91e8fa"}, 
             headerTintColor: "black", 
             drawerActiveTintColor:"black",
             drawerIcon: ({ size, color }) => (
@@ -160,7 +161,7 @@ const App = () => {
             )
           }}/>
         <Drawer.Screen name="Loudness" component={Loudness} options={{
-            headerStyle: {backgroundColor:"lightgreen"}, 
+            headerStyle: {backgroundColor:"#91e8fa"}, 
             headerTintColor: "black", 
             drawerActiveTintColor:"black",
             drawerIcon: ({ size, color }) => (
@@ -168,14 +169,22 @@ const App = () => {
             )
           }}/>
         <Drawer.Screen name="Humidity" component={Humidity} options={{
-            headerStyle: {backgroundColor:"lightgreen"}, 
+            headerStyle: {backgroundColor:"#91e8fa"}, 
             headerTintColor: "black", 
             drawerActiveTintColor:"black",
             drawerIcon: ({ size, color }) => (
               <Ionicons name="cloudy" size={size} color={color} />
             )
           }}/>
-          <Drawer.Screen name="Posture Check" component={Test} />
+          <Drawer.Screen name="Posture Check" component={Test}options={{
+            headerStyle: {backgroundColor:"#91e8fa"}, 
+            headerTintColor: "black", 
+            drawerActiveTintColor:"black",
+            drawerIcon: ({ size, color }) => (
+              <Ionicons name="analytics-outline" size={size} color={color} />
+            )
+            }}/>
+          
       </Drawer.Navigator>
     </NavigationContainer>
   );

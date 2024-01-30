@@ -6,8 +6,6 @@ const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     outerContainer: {
         flex: 1, 
-        borderWidth: 1, 
-        borderColor: 'black',
         paddingTop: 10,
         paddingRight: 40,
         paddingLeft: 40,

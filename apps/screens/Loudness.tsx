@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, ScrollView } from 'react-native';
+import { View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground } from 'react-native';
 import styles from '../../stylesheets/datastyles';
 import { FIREBASE_AUTH, FIRESTORE_DB, REALTIME_DB } from '../../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
@@ -16,6 +16,7 @@ const Loudness = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [userUID, setUserUID] = useState('');
+  const hasZeroRating = loudnessHistory.some(item => item.rating === 0);
 
   const getUsername = async (user: string) => {
     if (user) {
@@ -58,8 +59,8 @@ const Loudness = () => {
   }, [user, username, averageRating, averageComment]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const userUID = FIREBASE_AUTH.currentUser.uid;
+    if (user && username) {
+      setUserUID(FIREBASE_AUTH.currentUser.uid);
       const loudnessRef = ref(REALTIME_DB, `UsersData/${userUID}/readings/loudness`);
 
       const onDataChange = (snapshot) => {
@@ -74,13 +75,7 @@ const Loudness = () => {
       return () => {
         off(loudnessRef, onDataChange);
       };
-    };
-
-    fetchData(); // Initial fetch
-
-    const intervalId = setInterval(fetchData, 5000); // Fetch data every 5 seconds
-
-    return () => clearInterval(intervalId); // Clear interval on component unmount
+    }
   }, [user, username, userUID]);
 
   useEffect(() => {
@@ -100,9 +95,7 @@ const Loudness = () => {
   }, [loudnessRating]);
   
   useEffect(() => {
-  
-    const validRatings = loudnessHistory.map(item => ({
-      ...item,
+    const validRatings = loudnessHistory.map(item => ({...item,
       rating: parseFloat(item.rating) || 0, // Convert to number, default to 0 if not a valid number
     }));
   
@@ -122,6 +115,7 @@ const Loudness = () => {
     setAverageRating(parseFloat(avgRating.toFixed(2)));
     setAverageComment(foundAvgComment.comment);
   }, [loudnessHistory, updateCounter]);
+  
 
   const loudnessComments = [
     { range: [0, 20], comment: 'The place is extremely quiet, but nothing bad' },
@@ -140,39 +134,56 @@ const Loudness = () => {
   ];
 
   return (
-    <ScrollView style={styles.outerContainer}>
-      <View style={styles.middleContainer}>
-        <Text style={styles.dataTitle}>Loudness</Text>
-      </View>
-
-      <View style={styles.middleContainer}>
-        <View style={styles.innerContainer}>
-          <Text style={styles.historyText}>Decibel Level</Text>
-          <Text style={styles.dataRating}>Rating: {loudnessRating}dB</Text>
-          <Text style={styles.dataComment}>{loudnessComment}</Text>
-        </View>
-        <View style={styles.innerContainer}>
-          <View style={styles.averageRatingContainer}>
-            <Text style={styles.dataRating}>Average Rating: {Math.round(averageRating)}dB</Text>
-            <Text style={styles.dataComment}>{averageComment}</Text>
-          </View>    
-        </View>
-      </View>
-
-      <View style={styles.historyContainer}>
-        <Text style={styles.historyText}>History</Text>
-        <FlatList
-          data={loudnessHistory.slice().reverse()}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.historyDataContainer}>
-              <Text style={styles.dataRating}>{`Decible Levels: ${item.rating}dB`}</Text>
+    <ImageBackground
+    source={require('../../assets/bgimage.png')}
+    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ScrollView style={styles.outerContainer}>
+        {hasZeroRating ? (
+          // Loading view when there's a rating of zero in the history
+          <View style={styles.loadingContainer}>
+            <View style={styles.innerContainer}>
+                <Text style={styles.historyText}>Current Loudness</Text>
+                <Text style={styles.dataRating}>Rating: {loudnessRating}°C</Text>
+                <Text style={styles.dataComment}>{loudnessComment}</Text>
+              </View>
+            <Text style={styles.loadingText}>Gathering temperature readings...</Text>
+            <ActivityIndicator size="large" />
+          </View>
+        ) : (
+          // Display loudness data
+          <>
+            <View style={styles.middleContainer}>
+              <View style={styles.innerContainer}>
+                <Text style={styles.historyText}>Loudness Level</Text>
+                <Text style={styles.dataRating}>Rating: {loudnessRating}%</Text>
+                <Text style={styles.dataComment}>{loudnessComment}</Text>
+              </View>
+              <View style={styles.innerContainer}>
+                <View style={styles.averageRatingContainer}>
+                  <Text style={styles.dataRating}>Average Rating: {Math.round(averageRating)}%</Text>
+                  <Text style={styles.dataComment}>{averageComment}</Text>
+                </View>    
+              </View>
             </View>
-          )}
-        />
-      </View>
-    </ScrollView>
+
+            <View style={styles.historyContainer}>
+              <Text style={styles.historyText}>History</Text>
+              <FlatList
+                data={loudnessHistory.slice().reverse()}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <View style={styles.historyDataContainer}>
+                    <Text style={styles.dataRating}>{`Loudness Level: ${item.rating !== null ? `${item.rating}%` : 0}`}</Text>
+                  </View>
+                )}
+              />
+            </View>
+          </>
+        )}
+      </ScrollView>
+    </ImageBackground>
   );
 };
+
 
 export default Loudness;
