@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground } from 'react-native';
 import styles from '../../stylesheets/datastyles';
 import { FIREBASE_AUTH, FIRESTORE_DB, REALTIME_DB } from '../../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
@@ -149,74 +149,78 @@ const Temperature = () => {
   ];
   
   return (
-    <ScrollView style={styles.outerContainer}>
-      {hasZeroRating ? (
-        // Loading view when there's a rating of zero in the history
-        <View style={styles.loadingContainer}>
-          <View style={styles.innerContainer}>
-              <Text style={styles.historyText}>Current Temperature</Text>
-              <Text style={styles.dataRating}>Rating: {temperatureRating}°C</Text>
-              <Text style={styles.dataComment}>{temperatureComment}</Text>
-            </View>
-          <Text style={styles.loadingText}>Gathering temperature readings...</Text>
-          <ActivityIndicator size="large" />
-        </View>
-      ) : (
-        // Display humidity data
-        <>
-          <View style={styles.middleContainer}>
+    <ImageBackground
+    source={require('../../assets/bgimage.png')}
+    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ScrollView style={styles.outerContainer}>
+        {hasZeroRating ? (
+          // Loading view when there's a rating of zero in the history
+          <View style={styles.loadingContainer}>
             <View style={styles.innerContainer}>
-              <Text style={styles.historyText}>Current Temperature</Text>
-              <Text style={styles.dataRating}>Rating: {temperatureRating}°C</Text>
-              <Text style={styles.dataComment}>{temperatureComment}</Text>
-            </View>
-            <View style={styles.innerContainer}>
-              <View style={styles.averageRatingContainer}>
-                <Text style={styles.dataRating}>Average Rating: {Math.round(averageRating)}°C</Text>
-                <Text style={styles.dataComment}>{averageComment}</Text>
-              </View>    
-            </View>
+                <Text style={styles.historyText}>Current Temperature</Text>
+                <Text style={styles.dataRating}>Rating: {temperatureRating}°C</Text>
+                <Text style={styles.dataComment}>{temperatureComment}</Text>
+              </View>
+            <Text style={styles.loadingText}>Gathering temperature readings...</Text>
+            <ActivityIndicator size="large" />
           </View>
-
-          <ScrollView horizontal>
-            <View style={styles.historyContainer}>
-              <Text style={styles.historyText}>History</Text>
-              <LineChart
-                data={{
-                  labels: temperatureHistory.map((item) => item.time),
-                  datasets: [
-                    {
-                      data: temperatureHistory.map((item) => item.rating),
-                    },
-                  ],
-                }}
-                width={350}
-                height={220}
-                chartConfig={{
-                  backgroundGradientFrom: '#fff',
-                  backgroundGradientTo: '#fff',
-                  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                }}
-              />
+        ) : (
+          // Display humidity data
+          <>
+            <View style={styles.middleContainer}>
+              <View style={styles.innerContainer}>
+                <Text style={styles.historyText}>Current Temperature</Text>
+                <Text style={styles.dataRating}>Rating: {temperatureRating}°C</Text>
+                <Text style={styles.dataComment}>{temperatureComment}</Text>
+              </View>
+              <View style={styles.innerContainer}>
+                <View style={styles.averageRatingContainer}>
+                  <Text style={styles.dataRating}>Average Rating: {Math.round(averageRating)}°C</Text>
+                  <Text style={styles.dataComment}>{averageComment}</Text>
+                </View>    
+              </View>
             </View>
 
-            <View style={styles.historyContainer}>
-              <Text style={styles.historyText}>History List</Text>
-              <FlatList
-                data={temperatureHistory.slice().reverse()}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <View style={styles.historyDataContainer}>
-                    <Text style={styles.dataRating}>{`Temperature Readings: ${item.rating !== null ? `${item.rating}°C` : 0}`}</Text>
-                  </View>
-                )}
-              />
-            </View>
-          </ScrollView>
+            <ScrollView horizontal>
+              <View style={styles.historyContainer}>
+                <Text style={styles.historyText}>History</Text>
+                <LineChart
+                  data={{
+                    labels: temperatureHistory.map((item) => item.time),
+                    datasets: [
+                      {
+                        data: temperatureHistory.map((item) => item.rating),
+                      },
+                    ],
+                  }}
+                  width={350}
+                  height={220}
+                  chartConfig={{
+                    backgroundGradientFrom: '#fff',
+                    backgroundGradientTo: '#fff',
+                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                  }}
+                />
+              </View>
 
-        </>
-      )}
-    </ScrollView>
+              <View style={styles.historyContainer}>
+                <Text style={styles.historyText}>History List</Text>
+                <FlatList
+                  data={temperatureHistory.slice().reverse()}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <View style={styles.historyDataContainer}>
+                      <Text style={styles.dataRating}>{`Temperature Readings: ${item.rating !== null ? `${item.rating}°C` : 0}`}</Text>
+                    </View>
+                  )}
+                />
+              </View>
+            </ScrollView>
+
+          </>
+        )}
+      </ScrollView>
+    </ImageBackground>
   );
 };
 

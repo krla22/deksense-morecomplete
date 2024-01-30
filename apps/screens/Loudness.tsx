@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, ScrollView } from 'react-native';
+import { View, Text, FlatList, ScrollView, ImageBackground } from 'react-native';
 import styles from '../../stylesheets/datastyles';
 import { FIREBASE_AUTH, FIRESTORE_DB, REALTIME_DB } from '../../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
@@ -140,38 +140,43 @@ const Loudness = () => {
   ];
 
   return (
-    <ScrollView style={styles.outerContainer}>
-      <View style={styles.middleContainer}>
-        <Text style={styles.dataTitle}>Loudness</Text>
-      </View>
-
-      <View style={styles.middleContainer}>
-        <View style={styles.innerContainer}>
-          <Text style={styles.historyText}>Decibel Level</Text>
-          <Text style={styles.dataRating}>Rating: {loudnessRating}dB</Text>
-          <Text style={styles.dataComment}>{loudnessComment}</Text>
+    <ImageBackground
+    source={require('../../assets/bgimage.png')}
+    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ScrollView style={styles.outerContainer}>
+        <View style={styles.middleContainer}>
+          <Text style={styles.dataTitle}>Loudness</Text>
         </View>
-        <View style={styles.innerContainer}>
-          <View style={styles.averageRatingContainer}>
-            <Text style={styles.dataRating}>Average Rating: {Math.round(averageRating)}dB</Text>
-            <Text style={styles.dataComment}>{averageComment}</Text>
-          </View>    
-        </View>
-      </View>
 
-      <View style={styles.historyContainer}>
-        <Text style={styles.historyText}>History</Text>
-        <FlatList
-          data={loudnessHistory.slice().reverse()}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.historyDataContainer}>
-              <Text style={styles.dataRating}>{`Decible Levels: ${item.rating}dB`}</Text>
-            </View>
-          )}
-        />
-      </View>
-    </ScrollView>
+        <View style={styles.middleContainer}>
+          <View style={styles.innerContainer}>
+            <Text style={styles.historyText}>Decibel Level</Text>
+            <Text style={styles.dataRating}>Rating: {loudnessRating}dB</Text>
+            <Text style={styles.dataComment}>{loudnessComment}</Text>
+          </View>
+          <View style={styles.innerContainer}>
+            <View style={styles.averageRatingContainer}>
+              <Text style={styles.dataRating}>Average Rating: {Math.round(averageRating)}dB</Text>
+              <Text style={styles.dataComment}>{averageComment}</Text>
+            </View>    
+          </View>
+        </View>
+
+        <View style={styles.historyContainer}>
+          <Text style={styles.historyText}>History</Text>
+          <FlatList
+            data={loudnessHistory.slice().reverse()}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.historyDataContainer}>
+                <Text style={styles.dataRating}>{`Decible Levels: ${item.rating}dB`}</Text>
+              </View>
+            )}
+          />
+        </View>
+        <View style={{ marginBottom: 20 }}></View>
+      </ScrollView>
+    </ImageBackground>
   );
 };
 

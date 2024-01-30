@@ -97,7 +97,7 @@ function CustomDrawerContent(props: any) {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <DrawerContentScrollView {...props} options={{headerStyle: {backgroundColor:"lightgreen"}}}>
+      <DrawerContentScrollView {...props} options={{headerStyle: {backgroundColor:"#91e8fa" }}}>
         <View style={{flexDirection: "row", alignSelf:"center", marginTop: 20, paddingLeft: 50, paddingRight: 50, paddingTop: 20, paddingBottom: 20, borderBottomWidth: 1, borderTopWidth: 1, borderColor: "black"}}>
           <View style={{marginRight: 10, marginLeft: -10}}>
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
@@ -127,16 +127,16 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Drawer.Navigator screenOptions={{drawerStyle:{backgroundColor: "lightgrey"}}} drawerContent={CustomDrawerContent} initialRouteName='Welcome' >
+      <Drawer.Navigator screenOptions={{drawerStyle:{backgroundColor: "#91e8fa"}}} drawerContent={CustomDrawerContent} initialRouteName='Welcome' >
         <Drawer.Screen name="Welcome" component={Home} options={{headerShown: false, drawerItemStyle: { display: 'none'}}}/>
         <Drawer.Screen name="Basic View" component={Simple} options={{headerShown: false, 
           drawerIcon: ({ size, color }) => (
             <Ionicons name="book" size={size} color={color} />
           )}} />
-        <Drawer.Screen name="Profile" component={Profile} options={{drawerItemStyle: { display: 'none' }, headerStyle: {backgroundColor:"lightgreen"}}}/>
+        <Drawer.Screen name="Profile" component={Profile} options={{drawerItemStyle: { display: 'none' }, headerStyle: {backgroundColor:"#91e8fa"}}}/>
 
         <Drawer.Screen name="Dashboard" component={Dashboard} options={{
-            headerStyle: {backgroundColor:"lightgreen"}, 
+            headerStyle: {backgroundColor:"#91e8fa"}, 
             headerTintColor: "black", 
             drawerActiveTintColor:"black",
             drawerIcon: ({ size, color }) => (
@@ -144,7 +144,7 @@ const App = () => {
             )
           }}/>
         <Drawer.Screen name="Posture" component={Posture} options={{
-            headerStyle: {backgroundColor:"lightgreen"}, 
+            headerStyle: {backgroundColor:"#91e8fa"}, 
             headerTintColor: "black", 
             drawerActiveTintColor:"black",
             drawerIcon: ({ size, color }) => (
@@ -152,7 +152,7 @@ const App = () => {
             )
           }}/>
         <Drawer.Screen name="Temperature" component={Temperature} options={{
-            headerStyle: {backgroundColor:"lightgreen"}, 
+            headerStyle: {backgroundColor:"#91e8fa"}, 
             headerTintColor: "black", 
             drawerActiveTintColor:"black",
             drawerIcon: ({ size, color }) => (
@@ -160,7 +160,7 @@ const App = () => {
             )
           }}/>
         <Drawer.Screen name="Loudness" component={Loudness} options={{
-            headerStyle: {backgroundColor:"lightgreen"}, 
+            headerStyle: {backgroundColor:"#91e8fa"}, 
             headerTintColor: "black", 
             drawerActiveTintColor:"black",
             drawerIcon: ({ size, color }) => (
@@ -168,14 +168,21 @@ const App = () => {
             )
           }}/>
         <Drawer.Screen name="Humidity" component={Humidity} options={{
-            headerStyle: {backgroundColor:"lightgreen"}, 
+            headerStyle: {backgroundColor:"#91e8fa"}, 
             headerTintColor: "black", 
             drawerActiveTintColor:"black",
             drawerIcon: ({ size, color }) => (
               <Ionicons name="cloudy" size={size} color={color} />
             )
           }}/>
-          <Drawer.Screen name="Posture Check" component={Test} />
+          <Drawer.Screen name="Posture Check" component={Test}options={{
+            headerStyle: {backgroundColor:"#91e8fa"}, 
+            headerTintColor: "black", 
+            drawerActiveTintColor:"black",
+            drawerIcon: ({ size, color }) => (
+              <Ionicons name="analytics-outline" size={size} color={color} />
+            )
+            }}/>
       </Drawer.Navigator>
     </NavigationContainer>
   );
