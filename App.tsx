@@ -98,7 +98,7 @@ function CustomDrawerContent(props: any) {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <DrawerContentScrollView {...props} options={{headerStyle: {backgroundColor:"lightgreen"}}}>
+      <DrawerContentScrollView {...props} options={{headerStyle: {backgroundColor:"#91e8fa" }}}>
         <View style={{flexDirection: "row", alignSelf:"center", marginTop: 20, paddingLeft: 50, paddingRight: 50, paddingTop: 20, paddingBottom: 20, borderBottomWidth: 1, borderTopWidth: 1, borderColor: "black"}}>
           <View style={{marginRight: 10, marginLeft: -10}}>
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
@@ -128,6 +128,7 @@ const App = () => {
 
   return (
     <NavigationContainer>
+<<<<<<< HEAD
       <Drawer.Navigator initialRouteName='Welcome' screenOptions={{drawerStyle:{backgroundColor: "lightgrey"}}} drawerContent={CustomDrawerContent}>
         <Drawer.Screen name="Welcome" component={Welcome} options={{headerShown: false, swipeEnabled: false, drawerItemStyle: { display: 'none'}}}/>
         <Drawer.Screen name="Home" component={Home} options={{headerShown: false, swipeEnabled: false, drawerItemStyle: { display: 'none'}}}/>
@@ -136,6 +137,16 @@ const App = () => {
             <Ionicons name="book" size={size} color={color} />
             )}} />
         <Drawer.Screen name="Profile" component={Profile} options={{drawerItemStyle: { display: 'none' }, headerStyle: {backgroundColor:"#91e8fa"}}}/>
+=======
+      <Drawer.Navigator screenOptions={{drawerStyle:{backgroundColor: "#91e8fa"}}} drawerContent={CustomDrawerContent} initialRouteName='Welcome' >
+        <Drawer.Screen name="Welcome" component={Home} options={{headerShown: false, drawerItemStyle: { display: 'none'}}}/>
+        <Drawer.Screen name="Basic View" component={Simple} options={{headerShown: false, 
+          drawerIcon: ({ size, color }) => (
+            <Ionicons name="book" size={size} color={color} />
+          )}} />
+        <Drawer.Screen name="Profile" component={Profile} options={{drawerItemStyle: { display: 'none' }, headerStyle: {backgroundColor:"#91e8fa"}}}/>
+
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
         <Drawer.Screen name="Dashboard" component={Dashboard} options={{
             headerStyle: {backgroundColor:"#91e8fa"}, 
             headerTintColor: "black", 
@@ -184,7 +195,10 @@ const App = () => {
               <Ionicons name="analytics-outline" size={size} color={color} />
             )
             }}/>
+<<<<<<< HEAD
           
+=======
+>>>>>>> c95f7c29e3bb42f06a781609d0d1006cceb3a94e
       </Drawer.Navigator>
     </NavigationContainer>
   );
