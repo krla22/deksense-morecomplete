@@ -6,6 +6,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { off, onValue, ref, update } from 'firebase/database';
 import { LineChart } from 'react-native-chart-kit';
+import PushNotification from 'react-native-push-notification';
 
 const Temperature = () => {
   const [temperatureRating, setTemperatureRating] = useState(0);

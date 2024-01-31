@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 const AuthScreen = ({ email, setEmail, password, setPassword, isLogin, setIsLogin, handleAuthentication, username, setUsername, isLoading }: any) => {
   const navigation = useNavigation();
   return (
-    <ImageBackground source={{ uri: "https://media.discordapp.net/attachments/1194934283433943050/1201780567314812998/aaditya-ailawadhi-oJatUsLoNuU-unsplash.jpg?ex=65cb105f&is=65b89b5f&hm=97ce8b7219f61533506e07f04de7c9f345d9f92db5e6c76b6daa23f764e2dbcd&=&format=webp&width=771&height=936"}}>
+    <ImageBackground source={require('../assets/Login.jpg')}>
     <View style={styles.overallContainer}>
       <View style={styles.authContainer}>
         

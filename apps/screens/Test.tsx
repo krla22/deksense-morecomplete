@@ -313,10 +313,10 @@ const Test = () => {
               />
             )}
             {predictions.map((prediction, index) => (
-              <View key={index} style={{ alignItems: 'center', marginTop: 10 }}>
+              <View key={index} style={{ alignItems: 'center', marginTop: 18, marginRight: 10 }}>
                 <Text>Predictions:</Text>
-                <Text>Confidence: {prediction.confidences.join(', ')}</Text>
-                <Text>Display Names: {prediction.displayNames.join(', ')}</Text>
+                <Text>Guess: {formatDisplayName(prediction.displayNames.join(', '))}</Text>
+                <Text>Confidence: {formatConfidence(prediction.confidences.join(', '))}%</Text>
               </View>
             ))}
           </View>
@@ -370,6 +370,26 @@ const Test = () => {
       </View>
     </ImageBackground>
   );
+};
+
+const formatDisplayName = (displayName) => {
+  switch (displayName) {
+    case 'Bad_Posture':
+      return 'Bad Posture';
+    case 'Good_Posture':
+      return 'Good Posture';
+    case 'No_Person':
+      return 'No Person';
+    case 'Standing':
+      return 'Standing';
+    default:
+      return displayName;
+  }
+};
+
+// Helper function to format confidence
+const formatConfidence = (confidence) => {
+  return (parseFloat(confidence) * 100).toFixed(2);
 };
 
 export default Test;

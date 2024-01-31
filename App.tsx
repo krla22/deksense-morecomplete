@@ -11,7 +11,7 @@ import { signOut, onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH, FIRESTORE_DB, firebase } from './firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 import { doc, getDoc } from 'firebase/firestore';
-
+import PushNotification from 'react-native-push-notification';
 import Welcome from './apps/Welcome';
 import Simple from './apps/Simple';
 import Dashboard from './apps/screens/Dashboard';

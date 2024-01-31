@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "test-desksense",
+    "name": "DeskSense",
     "slug": "test-desksense",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,8 +8,8 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#020c0c"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -35,7 +35,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "887c32ce-1cb5-48ae-a38b-2c2cafe4b261"
+        "projectId": "0f945b41-ec3f-40e8-a438-81d225625ae6"
       }
     }
   }
