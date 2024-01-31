@@ -164,7 +164,7 @@ const Temperature = () => {
   return (
     <ImageBackground
       source={require('../../assets/bgimage.png')}
-      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}> 
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>  
       <ScrollView style={styles.outerContainer}>
         {hasZeroRating ? (
           // Loading view when there's a rating of zero in the history
@@ -182,54 +182,52 @@ const Temperature = () => {
           <>
             <View style={styles.middleContainer}>
               <View style={styles.innerContainer}>
-                <Text style={styles.historyText}>Current Temperature</Text>
-                <Text style={styles.dataRating}>Rating: {temperatureRating}°C</Text>
+                <Text style={styles.historyText}>Temperature Reading</Text>
+                <Text style={styles.dataRating}>Rating: {temperatureRating}%</Text>
                 <Text style={styles.dataComment}>{temperatureComment}</Text>
               </View>
               <View style={styles.innerContainer}>
                 <View style={styles.averageRatingContainer}>
-                  <Text style={styles.dataRating}>Average Rating: {Math.round(averageRating)}°C</Text>
+                  <Text style={styles.dataRating}>Average Rating: {Math.round(averageRating)}%</Text>
                   <Text style={styles.dataComment}>{averageComment}</Text>
                 </View>    
               </View>
             </View>
 
-            <ScrollView horizontal>
-              <View style={styles.historyContainer}>
+            <View style={styles.historyContainer}>
+              <Text style={styles.historyText}>History</Text>
+              <FlatList
+                data={humidityHistory.slice().reverse()}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <View style={styles.historyDataContainer}>
+                    <Text style={styles.dataRating}>{`Humidity Level: ${item.rating !== null ? `${item.rating}%` : 0}`}</Text>
+                  </View>
+                )}
+              />
+            </View>
+
+            <View style={styles.historyContainer}>
                 <Text style={styles.historyText}>History</Text>
                 <LineChart
                   data={{
-                    labels: temperatureHistory.map((item) => item.time),
+                    labels: [''],
                     datasets: [
                       {
-                        data: temperatureHistory.map((item) => item.rating),
+                        data: humidityHistory.map((item) => item.rating),
                       },
                     ],
                   }}
-                  width={350}
+                  width={310}
                   height={220}
                   chartConfig={{
-                    backgroundGradientFrom: '#fff',
-                    backgroundGradientTo: '#fff',
+                    backgroundGradientFrom: 'lightblue',
+                    backgroundGradientTo: 'lightblue',
                     color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                   }}
+                  style={{borderRadius: 20}}
                 />
               </View>
-
-              <View style={styles.historyContainer}>
-                <Text style={styles.historyText}>History List</Text>
-                <FlatList
-                  data={temperatureHistory.slice().reverse()}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => (
-                    <View style={styles.historyDataContainer}>
-                      <Text style={styles.dataRating}>{`Temperature Readings: ${item.rating !== null ? `${item.rating}°C` : 0}`}</Text>
-                    </View>
-                  )}
-                />
-              </View>
-            </ScrollView>
-
           </>
         )}
       </ScrollView>

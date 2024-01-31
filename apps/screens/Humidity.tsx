@@ -5,6 +5,7 @@ import { FIREBASE_AUTH, FIRESTORE_DB, REALTIME_DB } from '../../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { off, onValue, ref, update } from 'firebase/database';
+import { LineChart } from 'react-native-chart-kit';
 
 const Humidity = () => {
   const [humidityRating, setHumidityRating] = useState(0);
@@ -178,6 +179,28 @@ const Humidity = () => {
                 )}
               />
             </View>
+
+            <View style={styles.historyContainer}>
+                <Text style={styles.historyText}>History</Text>
+                <LineChart
+                  data={{
+                    labels: [''],
+                    datasets: [
+                      {
+                        data: humidityHistory.map((item) => item.rating),
+                      },
+                    ],
+                  }}
+                  width={310}
+                  height={220}
+                  chartConfig={{
+                    backgroundGradientFrom: 'lightblue',
+                    backgroundGradientTo: 'lightblue',
+                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                  }}
+                  style={{borderRadius: 20}}
+                />
+              </View>
           </>
         )}
       </ScrollView>

@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     historyContainer: {
         borderWidth: 1, 
         borderColor: 'black',
-        marginBottom: 10,
+        marginBottom: 5,
         borderRadius: 20,
         backgroundColor: "lightblue",
         alignItems: "center",
