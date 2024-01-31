@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Alert, ScrollView, ImageBackground } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as FileSystem from 'expo-file-system';
@@ -223,8 +223,6 @@ const Test = () => {
               // Save confidence and display name to the Realtime Database
               const confidenceRef = ref(REALTIME_DB, `UsersData/${userUID}/posture/confidence`);
               const displayNameRef = ref(REALTIME_DB, `UsersData/${userUID}/posture/displayName`);
-              console.log('ConfidenceRef:', confidenceRef.toString());
-              console.log('DisplayNameRef:', displayNameRef.toString());
 
               const confidenceObj = {
                 confidenceData: confidence
@@ -235,7 +233,6 @@ const Test = () => {
               
               try {
                 await update(confidenceRef, confidenceObj);
-                console.log('Confidence data updated successfully.');
               } catch (error) {
                 console.error('Error updating confidence data:', error);
                 // Handle the error appropriately
@@ -250,8 +247,6 @@ const Test = () => {
       }
     }
   };
-  
-  
 
   // Toggle between front and back cameras
   const toggleCameraType = () => {
@@ -283,82 +278,97 @@ const Test = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ flex: 0.7 }}>
-        {useCamera && (
-          <Camera
-            style={{ flex: 1 }}
-            type={cameraType}
-            ref={cameraRef}
-            onCameraReady={() => console.log('Camera is ready')}
-          />
-        )}
-      </View>
-
-      <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 5, alignItems: 'center' }}>
-        <View style={{ backgroundColor: 'white', flexDirection: 'row' }}>
-          {capturedImage && (
+    <ImageBackground source={require('../../assets/bgimage.png')}
+    style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 0.7 }}>
+        {showCameraButtons ? (
+          <View style={{ flex: 1 }}>
+            {useCamera && (
+              <Camera
+                style={{ flex: 1 }}
+                type={cameraType}
+                ref={cameraRef}
+                onCameraReady={() => console.log('Camera is ready')}
+              />
+            )}
+          </View>
+        ) : (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Image
-              source={{ uri: capturedImage }}
-              style={{ width: 80, height: 80, margin: 10 }}
-            />
-          )}
-          {predictions.map((prediction, index) => (
-            <View key={index} style={{ alignItems: 'center', marginTop: 10 }}>
-              <Text>Predictions:</Text>
-              <Text>Confidences: {prediction.confidences.join(', ')}</Text>
-              <Text>Display Names: {prediction.displayNames.join(', ')}</Text>
-            </View>
-          ))}
+                source={{ uri: capturedImage }}
+                style={{ width: 300, height: 300, justifyContent: "center", marginTop: 120 }}
+              />
+            {capturedImage && <Image source={{ uri: capturedImage }} style={{ flex: 1 }} />}
+          </View>
+        )}
         </View>
 
-        <ScrollView horizontal>
-          <View style={{ alignItems: 'center' }}>
-            {isWatching ? (
-              <TouchableOpacity
-                onPress={stopAutoCapture}
-                style={{ padding: 10, backgroundColor: 'red', borderRadius: 5, margin: 5, width: 140 }}
-              >
-                <Text style={{ color: 'white', fontSize: 14, textAlign: 'center' }}>Stop Auto Capture</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                onPress={startAutoCapture}
-                style={{ padding: 10, backgroundColor: 'green', borderRadius: 5, margin: 5, width: 140 }}
-              >
-                <Text style={{ color: 'white', fontSize: 14, textAlign: 'center' }}>Start Auto Capture</Text>
-              </TouchableOpacity>
+        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 5, alignItems: 'center' }}>
+          <View style={{ backgroundColor: 'white', flexDirection: 'row' }}>
+            {capturedImage && (
+              <Image
+                source={{ uri: capturedImage }}
+                style={{ width: 80, height: 80, margin: 10 }}
+              />
             )}
-            <TouchableOpacity
-              onPress={switchImageSource}
-              style={{ padding: 10, backgroundColor: 'purple', borderRadius: 5, margin: 5, width: 140 }}
-            >
-              <Text style={{ color: 'white', fontSize: 13, textAlign: 'center' }}>
-                {useCamera ? 'Switch to Database' : 'Switch to Camera'}
-              </Text>
-            </TouchableOpacity>
+            {predictions.map((prediction, index) => (
+              <View key={index} style={{ alignItems: 'center', marginTop: 10 }}>
+                <Text>Predictions:</Text>
+                <Text>Confidence: {prediction.confidences.join(', ')}</Text>
+                <Text>Display Names: {prediction.displayNames.join(', ')}</Text>
+              </View>
+            ))}
           </View>
-          <View style={{ alignItems: 'center' }}>
-            {showCameraButtons && (
-              <>
+
+          <ScrollView horizontal>
+            <View style={{ alignItems: 'center' }}>
+              {isWatching ? (
                 <TouchableOpacity
-                  onPress={toggleCameraType}
+                  onPress={stopAutoCapture}
                   style={{ padding: 10, backgroundColor: 'red', borderRadius: 5, margin: 5, width: 140 }}
                 >
-                  <Text style={{ color: 'white', fontSize: 14, textAlign: 'center' }}>Flip Camera</Text>
+                  <Text style={{ color: 'white', fontSize: 14, textAlign: 'center' }}>Stop Auto Capture</Text>
                 </TouchableOpacity>
+              ) : (
                 <TouchableOpacity
-                  onPress={takeSinglePhoto}
-                  style={{ padding: 10, backgroundColor: 'blue', borderRadius: 5, margin: 5, width: 140 }}
+                  onPress={startAutoCapture}
+                  style={{ padding: 10, backgroundColor: 'green', borderRadius: 5, margin: 5, width: 140 }}
                 >
-                  <Text style={{ color: 'white', fontSize: 14, textAlign: 'center' }}>Take Photo</Text>
+                  <Text style={{ color: 'white', fontSize: 14, textAlign: 'center' }}>Start Auto Capture</Text>
                 </TouchableOpacity>
-              </>
-            )}
-          </View>
-        </ScrollView>
+              )}
+              <TouchableOpacity
+                onPress={switchImageSource}
+                style={{ padding: 10, backgroundColor: 'purple', borderRadius: 5, margin: 5, width: 140 }}
+              >
+                <Text style={{ color: 'white', fontSize: 13, textAlign: 'center' }}>
+                  {useCamera ? 'Switch to Database' : 'Switch to Camera'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ alignItems: 'center' }}>
+              {showCameraButtons && (
+                <>
+                  <TouchableOpacity
+                    onPress={toggleCameraType}
+                    style={{ padding: 10, backgroundColor: 'red', borderRadius: 5, margin: 5, width: 140 }}
+                  >
+                    <Text style={{ color: 'white', fontSize: 14, textAlign: 'center' }}>Flip Camera</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={takeSinglePhoto}
+                    style={{ padding: 10, backgroundColor: 'blue', borderRadius: 5, margin: 5, width: 140 }}
+                  >
+                    <Text style={{ color: 'white', fontSize: 14, textAlign: 'center' }}>Take Photo</Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+          </ScrollView>
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 

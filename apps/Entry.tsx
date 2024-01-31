@@ -7,18 +7,17 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { off, onValue, ref, update } from 'firebase/database';
 import { LineChart } from 'react-native-chart-kit';
 
-const Temperature = () => {
-  const [confidenceRating, setConfidenceRating] = useState(0);
-  const [displayNameString, setDisplayNameString] = useState('');
-  const [temperatureComment, setTemperatureComment] = useState('');
-  const [temperatureHistory, setTemperatureHistory] = useState(Array.from({ length: 10 }, () => ({ rating: 0, comment: '' })));
+const Humidity = () => {
+  const [humidityRating, setHumidityRating] = useState(0);
+  const [humidityComment, setHumidityComment] = useState('');
+  const [humidityHistory, setHumidityHistory] = useState(Array.from({ length: 10 }, () => ({ rating: 0, comment: '' })));
   const [averageRating, setAverageRating] = useState(0);
   const [averageComment, setAverageComment] = useState('');
   const [updateCounter, setUpdateCounter] = useState(0);
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [userUID, setUserUID] = useState('');
-  const hasZeroRating = temperatureHistory.some(item => item.rating === 0);
+  const hasZeroRating = humidityHistory.some(item => item.rating === 0);
 
   const getUsername = async (user: string) => {
     if (user) {
@@ -46,8 +45,8 @@ const Temperature = () => {
     if (user && username) {
       const userDataRef = ref(REALTIME_DB, `UsersData/${userUID}/average`);
       const averageData = {
-        averageTemperatureRating: averageRating,
-        averageTemperatureComment: averageComment,
+        averageHumidityRating: averageRating,
+        averageHumidityComment: averageComment,
       };
 
       update(userDataRef, averageData)
@@ -63,48 +62,41 @@ const Temperature = () => {
   useEffect(() => {
     if (user && username) {
       setUserUID(FIREBASE_AUTH.currentUser.uid);
-      const confidenceDataRef = ref(REALTIME_DB, `UsersData/${userUID}/posture/confidenceData`);
-      const displayNameRef = ref(REALTIME_DB, `UsersData/${userUID}/posture/displayName`);
+      const humidityRef = ref(REALTIME_DB, `UsersData/${userUID}/readings/humidity`);
 
       const onDataChange = (snapshot) => {
-        const confidenceValue = snapshot.val();
-        const displayNameValue = snapshot.val();
-        if (confidenceValue !== null && !isNaN(confidenceValue)) {
-          setConfidenceRating(confidenceValue);
-        }
-        if (displayNameValue !== null && !isNaN(displayNameValue)) {
-          setDisplayNameString(displayNameValue)
+        const humidityValue = snapshot.val();
+        if (humidityValue !== null && !isNaN(humidityValue)) {
+          setHumidityRating(humidityValue);
         }
       };
 
-      onValue(confidenceDataRef, onDataChange);
-      onValue(displayNameRef, onDataChange);
+      onValue(humidityRef, onDataChange);
 
       return () => {
-        off(confidenceDataRef, onDataChange);
-        off(displayNameRef, onDataChange);
+        off(humidityRef, onDataChange);
       };
     }
   }, [user, username, userUID]);
 
   useEffect(() => {
-    const foundComment = temperatureComments.find(
-      (item) => item.range[0] <= temperatureRating && temperatureRating <= item.range[1]
+    const foundComment = humidityComments.find(
+      (item) => item.range[0] <= humidityRating && humidityRating <= item.range[1]
     );
   
-    setTemperatureComment(foundComment ? foundComment.comment : '');
+    setHumidityComment(foundComment ? foundComment.comment : '');
   
     const newArray = Array.from({ length: 1 }, (_, index) => ({
-      rating: confidenceRating,
+      rating: humidityRating,
       comment: foundComment ? foundComment.comment : '',
     }));
   
-    setTemperatureHistory((prevHistory) => [...prevHistory.slice(1), ...newArray].slice(-10))
+    setHumidityHistory((prevHistory) => [...prevHistory.slice(1), ...newArray].slice(-10))
     setUpdateCounter((prevCounter) => prevCounter + 1);
-  }, [confidenceRating]);
+  }, [humidityRating]);
   
   useEffect(() => {
-    const validRatings = temperatureHistory.map(item => ({...item,
+    const validRatings = humidityHistory.map(item => ({...item,
       rating: parseFloat(item.rating) || 0, // Convert to number, default to 0 if not a valid number
     }));
   
@@ -123,23 +115,23 @@ const Temperature = () => {
   
     setAverageRating(parseFloat(avgRating.toFixed(2)));
     setAverageComment(foundAvgComment.comment);
-  }, [temperatureHistory, updateCounter]);
+  }, [humidityHistory, updateCounter]);
   
 
-  const temperatureComments = [
-    { range: [0.0, 2.0], comment: 'Extremely dry conditions. Consider moisturizing.' },
-    { range: [2.1, 4.0], comment: 'Low temperature. Skin and respiratory care advised.' },
-    { range: [4.1, 6.0], comment: 'Optimal temperature for comfort and well-being.' },
-    { range: [6.1, 8.0], comment: 'Moderate temperature. Watch for potential discomfort.' },
-    { range: [8.1, 10.0], comment: 'High temperature levels. Be mindful of respiratory effects.' },
+  const humidityComments = [
+    { range: [0, 20], comment: 'Extremely dry conditions. Consider moisturizing.' },
+    { range: [21, 40], comment: 'Low humidity. Skin and respiratory care advised.' },
+    { range: [41, 60], comment: 'Optimal humidity for comfort and well-being.' },
+    { range: [61, 80], comment: 'Moderate humidity. Watch for potential discomfort.' },
+    { range: [81, 100], comment: 'High humidity levels. Be mindful of respiratory effects.' },
   ];
 
   const averageRatingComments = [
-    { range: [0.0, 2.0], comment: 'Extremely dry air.' },
-    { range: [2.1, 4.0], comment: 'Dry air. Consider using a humidifier.' },
-    { range: [4.1, 6.0], comment: 'Comfortable temperature levels.' },
-    { range: [6.1, 8.0], comment: 'Humid air. Be cautious with respiratory issues.' },
-    { range: [8.1, 10.0], comment: 'Very humid. May cause discomfort and respiratory issues.' },
+    { range: [0, 20], comment: 'Extremely dry air.' },
+    { range: [21, 40], comment: 'Dry air. Consider using a humidifier.' },
+    { range: [41, 60], comment: 'Comfortable humidity levels.' },
+    { range: [61, 80], comment: 'Humid air. Be cautious with respiratory issues.' },
+    { range: [81, 100], comment: 'Very humid. May cause discomfort and respiratory issues.' },
   ];
 
   return (
@@ -151,23 +143,21 @@ const Temperature = () => {
           // Loading view when there's a rating of zero in the history
           <View style={styles.loadingContainer}>
             <View style={styles.innerContainer}>
-                <Text style={styles.historyText}>Current Temperature</Text>
-                <Text style={styles.dataRating}>Rating: {confidenceRating}</Text>
-                <Text style={styles.dataRating}>Name: {displayNameString}</Text>
-                <Text style={styles.dataComment}>{temperatureComment}</Text>
+                <Text style={styles.historyText}>Current Humidity</Text>
+                <Text style={styles.dataRating}>Rating: {humidityRating}°C</Text>
+                <Text style={styles.dataComment}>{humidityComment}</Text>
               </View>
             <Text style={styles.loadingText}>Gathering temperature readings...</Text>
             <ActivityIndicator size="large" />
           </View>
         ) : (
-          // Display temperature data
+          // Display humidity data
           <>
             <View style={styles.middleContainer}>
               <View style={styles.innerContainer}>
-                <Text style={styles.historyText}>Temperature Level</Text>
-                <Text style={styles.dataRating}>Rating: {confidenceRating}</Text>
-                <Text style={styles.dataRating}>Name: {displayNameString}</Text>
-                <Text style={styles.dataComment}>{temperatureComment}</Text>
+                <Text style={styles.historyText}>Humidity Level</Text>
+                <Text style={styles.dataRating}>Rating: {humidityRating}%</Text>
+                <Text style={styles.dataComment}>{humidityComment}</Text>
               </View>
               <View style={styles.innerContainer}>
                 <View style={styles.averageRatingContainer}>
@@ -180,11 +170,11 @@ const Temperature = () => {
             <View style={styles.historyContainer}>
               <Text style={styles.historyText}>History</Text>
               <FlatList
-                data={temperatureHistory.slice().reverse()}
+                data={humidityHistory.slice().reverse()}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                   <View style={styles.historyDataContainer}>
-                    <Text style={styles.dataRating}>{`Temperature Level: ${item.rating !== null ? `${item.rating}%` : 0}`}</Text>
+                    <Text style={styles.dataRating}>{`Humidity Level: ${item.rating !== null ? `${item.rating}%` : 0}`}</Text>
                   </View>
                 )}
               />
@@ -197,7 +187,7 @@ const Temperature = () => {
                     labels: [''],
                     datasets: [
                       {
-                        data: temperatureHistory.map((item) => item.rating),
+                        data: humidityHistory.map((item) => item.rating),
                       },
                     ],
                   }}
@@ -219,4 +209,4 @@ const Temperature = () => {
 };
 
 
-export default Temperature;
+export default Humidity;

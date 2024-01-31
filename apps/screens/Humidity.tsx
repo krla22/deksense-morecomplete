@@ -117,21 +117,20 @@ const Humidity = () => {
     setAverageComment(foundAvgComment.comment);
   }, [humidityHistory, updateCounter]);
   
-
   const humidityComments = [
-    { range: [0, 20], comment: 'Extremely dry conditions. Consider moisturizing.' },
-    { range: [21, 40], comment: 'Low humidity. Skin and respiratory care advised.' },
-    { range: [41, 60], comment: 'Optimal humidity for comfort and well-being.' },
-    { range: [61, 80], comment: 'Moderate humidity. Watch for potential discomfort.' },
-    { range: [81, 100], comment: 'High humidity levels. Be mindful of respiratory effects.' },
+    { range: [0, 20], comment: 'Extremely dry, consider moisturizing your skin.' },
+    { range: [21, 40], comment: 'Air is a bit dry, take care of your skin and breathing.' },
+    { range: [41, 60], comment: 'Enjoy optimal humidity levels for comfort.' },
+    { range: [61, 80], comment: 'Moderate humidity, be mindful of potential discomfort.' },
+    { range: [81, 100], comment: 'High humidity, watch out for respiratory effects.' },
   ];
 
   const averageRatingComments = [
-    { range: [0, 20], comment: 'Extremely dry air.' },
-    { range: [21, 40], comment: 'Dry air. Consider using a humidifier.' },
-    { range: [41, 60], comment: 'Comfortable humidity levels.' },
-    { range: [61, 80], comment: 'Humid air. Be cautious with respiratory issues.' },
-    { range: [81, 100], comment: 'Very humid. May cause discomfort and respiratory issues.' },
+    { range: [0, 20], comment: 'Extremely dry overall.' },
+    { range: [21, 40], comment: 'Somewhat dry, consider a humidifier for comfort.' },
+    { range: [41, 60], comment: 'Comfortable humidity levels on average.' },
+    { range: [61, 80], comment: 'Moderate average humidity, be cautious if you have breathing issues.' },
+    { range: [81, 100], comment: 'Very humid on average, watch for discomfort and breathing issues.' },
   ];
 
   return (

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, ScrollView, ActivityIndicator, AppState, ImageBackground  } from 'react-native';
+import { View, Text, FlatList, ScrollView, ActivityIndicator, ImageBackground, Dimensions } from 'react-native';
 import styles from '../../stylesheets/datastyles';
 import { FIREBASE_AUTH, FIRESTORE_DB, REALTIME_DB } from '../../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
-import { ref, update, onValue, off } from 'firebase/database';
+import { off, onValue, ref, update } from 'firebase/database';
 import { LineChart } from 'react-native-chart-kit';
 
 const Temperature = () => {
@@ -18,19 +18,8 @@ const Temperature = () => {
   const [username, setUsername] = useState('');
   const [userUID, setUserUID] = useState('');
   const hasZeroRating = temperatureHistory.some(item => item.rating === 0);
-  const [appState, setAppState] = useState(AppState.currentState);
-
-  useEffect(() => {
-    const handleAppStateChange = (nextAppState) => {
-      setAppState(nextAppState);
-    };
-
-    AppState.addEventListener('change', handleAppStateChange);
-
-    return () => {
-      AppState.removeEventListener('change', handleAppStateChange);
-    };
-  }, []);
+  const windowWidth = Dimensions.get('window').width;
+  const windowHeight = Dimensions.get('window').height;
 
   const getUsername = async (user: string) => {
     if (user) {
@@ -90,42 +79,27 @@ const Temperature = () => {
         off(temperatureRef, onDataChange);
       };
     }
-  }, [user, username, userUID, appState]);
+  }, [user, username, userUID]);
 
   useEffect(() => {
-    console.log(temperatureRating)
-    const foundComment = temperatureComments.reduce((closest, current) => {
-      const currentDiff = Math.min(
-        Math.abs(temperatureRating - current.range[0]),
-        Math.abs(temperatureRating - current.range[1])
-      );
-      const closestDiff = Math.min(
-        Math.abs(temperatureRating - closest.range[0]),
-        Math.abs(temperatureRating - closest.range[1])
-      );
-  
-      return currentDiff < closestDiff ? current : closest;
-    }, temperatureComments[0]);
-    console.log('Found Comment:', foundComment);
+    const foundComment = temperatureComments.find(
+      (item) => item.range[0] <= temperatureRating && temperatureRating <= item.range[1]
+    );
   
     setTemperatureComment(foundComment ? foundComment.comment : '');
-    console.log(temperatureComment)
   
     const newArray = Array.from({ length: 1 }, (_, index) => ({
       rating: temperatureRating,
       comment: foundComment ? foundComment.comment : '',
-      time: new Date().toLocaleTimeString(),
     }));
   
-    setTemperatureHistory((prevHistory) => [...prevHistory, ...newArray]);
+    setTemperatureHistory((prevHistory) => [...prevHistory.slice(1), ...newArray].slice(-10))
     setUpdateCounter((prevCounter) => prevCounter + 1);
   }, [temperatureRating]);
   
   useEffect(() => {
-    const lastTenRatings = temperatureHistory.slice(-10);
-  
-    const validRatings = lastTenRatings.map(item => ({...item,
-      rating: parseFloat(item.rating) || 0,
+    const validRatings = temperatureHistory.map(item => ({...item,
+      rating: parseFloat(item.rating) || 0, // Convert to number, default to 0 if not a valid number
     }));
   
     const sumRating = validRatings.reduce((sum, item) => sum + item.rating, 0);
@@ -144,23 +118,25 @@ const Temperature = () => {
     setAverageRating(parseFloat(avgRating.toFixed(2)));
     setAverageComment(foundAvgComment.comment);
   }, [temperatureHistory, updateCounter]);
+  
 
   const temperatureComments = [
-    { range: [20, 25], comment: 'It is too cold, consider warming up.' },
-    { range: [26, 30], comment: 'The temperature is comfortable.' },
-    { range: [31, 35], comment: 'It is getting warm, stay cool.' },
-    { range: [36, 40], comment: 'It is hot, make sure to stay hydrated.' },
-    { range: [41, 50], comment: 'It is extremely hot, take necessary precautions.' },
-  ];
-
-  const averageRatingComments = [
-    { range: [20, 25], comment: 'Consider warming yourself up!' },
-    { range: [26, 30], comment: 'The temperatures are comfortable and good!' },
-    { range: [31, 35], comment: 'The room is getting hotter' },
-    { range: [36, 40], comment: 'Consider cooling your room to prevent health risks!' },
-    { range: [41, 50], comment: 'Health Risk! Please get out of the room!' },
+    { range: [0, 10], comment: 'Very cold. Ensure to keep warm to prevent cold-related issues.' },
+    { range: [11, 20], comment: 'Cold weather. Dress warmly and stay comfortable.' },
+    { range: [21, 30], comment: 'Mild temperatures. Enjoy the pleasant weather.' },
+    { range: [31, 40], comment: 'Warm temperatures. Ideal for outdoor activities.' },
+    { range: [41, 50], comment: 'Hot weather. Stay hydrated and protect yourself from the sun.' },
   ];
   
+
+  const averageRatingComments = [
+    { range: [0, 10], comment:  'Extreme coldness, please heat up.' },
+    { range: [11, 20], comment: 'Cool conditions, but extra clothing is fine to wear too.' },
+    { range: [21, 30], comment: 'Moderately warm temperatures, generally comfortable for most people.' },
+    { range: [31, 40], comment: 'Warm temperatures, drink water and stay cool!' },
+    { range: [41, 50], comment: 'Hot temperatures, cool yourself down to prevent overheating!' },
+  ];  
+
   return (
     <ImageBackground
       source={require('../../assets/bgimage.png')}
@@ -178,17 +154,17 @@ const Temperature = () => {
             <ActivityIndicator size="large" />
           </View>
         ) : (
-          // Display humidity data
+          // Display temperature data
           <>
             <View style={styles.middleContainer}>
               <View style={styles.innerContainer}>
-                <Text style={styles.historyText}>Temperature Reading</Text>
-                <Text style={styles.dataRating}>Rating: {temperatureRating}%</Text>
+                <Text style={styles.historyText}>Temperature Level</Text>
+                <Text style={styles.dataRating}>Rating: {temperatureRating}°C</Text>
                 <Text style={styles.dataComment}>{temperatureComment}</Text>
               </View>
               <View style={styles.innerContainer}>
                 <View style={styles.averageRatingContainer}>
-                  <Text style={styles.dataRating}>Average Rating: {Math.round(averageRating)}%</Text>
+                  <Text style={styles.dataRating}>Average Rating: {Math.round(averageRating)}°C</Text>
                   <Text style={styles.dataComment}>{averageComment}</Text>
                 </View>    
               </View>
@@ -197,29 +173,28 @@ const Temperature = () => {
             <View style={styles.historyContainer}>
               <Text style={styles.historyText}>History</Text>
               <FlatList
-                data={humidityHistory.slice().reverse()}
+                data={temperatureHistory.slice().reverse()}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                   <View style={styles.historyDataContainer}>
-                    <Text style={styles.dataRating}>{`Humidity Level: ${item.rating !== null ? `${item.rating}%` : 0}`}</Text>
+                    <Text style={styles.dataRating}>{`Temperature Level: ${item.rating !== null ? `${item.rating}°C` : 0}`}</Text>
                   </View>
                 )}
               />
             </View>
-
-            <View style={styles.historyContainer}>
+              <View style={styles.historyContainer}>
                 <Text style={styles.historyText}>History</Text>
                 <LineChart
                   data={{
                     labels: [''],
                     datasets: [
                       {
-                        data: humidityHistory.map((item) => item.rating),
+                        data: temperatureHistory.map((item) => item.rating),
                       },
                     ],
                   }}
-                  width={310}
-                  height={220}
+                  width={windowWidth - 100}
+                  height={120}
                   chartConfig={{
                     backgroundGradientFrom: 'lightblue',
                     backgroundGradientTo: 'lightblue',
@@ -228,11 +203,14 @@ const Temperature = () => {
                   style={{borderRadius: 20}}
                 />
               </View>
+              <View style={{margin:10}}>
+              </View>
           </>
         )}
       </ScrollView>
     </ImageBackground>
   );
 };
+
 
 export default Temperature;
